@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,6 +17,12 @@ export const metadata: Metadata = {
   title: "salaris.fyi - Salary Insights Across Top Companies",
   description:
     "Discover salary insights and compensation data across top tech companies. Filter by company, location, designation, and experience level.",
+  icons: {
+    icon: [
+      { url: '/favicon.png' },
+      { url: '/icon.png', sizes: '500x500', type: 'image/png' },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -29,6 +36,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );

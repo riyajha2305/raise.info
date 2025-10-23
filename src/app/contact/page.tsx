@@ -76,17 +76,17 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-[#F0F0F0]">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-[#80A1BA] shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
             <Link href="/">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-[#80A1BA] to-[#5A7A8A] bg-clip-text text-transparent mb-2 cursor-pointer hover:opacity-80 transition-opacity">
+              <h1 className="text-4xl font-bold text-[#F0F0F0] mb-2 cursor-pointer hover:opacity-80 transition-opacity">
                 salaris.fyi
               </h1>
             </Link>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-[#F0F0F0]">
               Discover salary insights across various companies
             </p>
           </div>
@@ -207,26 +207,26 @@ export default function ContactUs() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-white border-t mt-12">
+      <footer className="bg-[#80A1BA] border-t border-[#6B8BA0] mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="text-gray-500 text-sm">
+            <div className="text-[#F0F0F0] text-sm">
               © 2024 salaris.fyi. All rights reserved.
             </div>
             <div className="flex gap-6 text-sm">
               <Link
                 href="/"
-                className="text-gray-600 hover:text-[#80A1BA] transition-colors"
+                className="text-[#F0F0F0] hover:text-white transition-colors"
               >
                 Home
               </Link>
               <Link
                 href="/about"
-                className="text-gray-600 hover:text-[#80A1BA] transition-colors"
+                className="text-[#F0F0F0] hover:text-white transition-colors"
               >
                 About
               </Link>
-              <Link href="/contact" className="text-[#80A1BA] font-medium">
+              <Link href="/contact" className="text-[#F0F0F0] font-medium hover:text-white transition-colors">
                 Contact
               </Link>
             </div>
