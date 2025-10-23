@@ -28,11 +28,6 @@ interface Filters {
   salaryMax: number;
 }
 
-interface FeedbackData {
-  message: string;
-  rating: number;
-}
-
 type SortField = keyof SalaryData;
 type SortDirection = "asc" | "desc";
 
@@ -65,6 +60,10 @@ export default function PayScope() {
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const [feedbackRating, setFeedbackRating] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+  const [feedbackStatus, setFeedbackStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   // Autocomplete state
   const [showAutocomplete, setShowAutocomplete] = useState(false);
@@ -216,20 +215,46 @@ export default function PayScope() {
   };
 
   // Handle feedback submission
-  const handleFeedbackSubmit = () => {
-    const feedback: FeedbackData = {
-      message: feedbackMessage,
-      rating: feedbackRating,
-    };
-    console.log("Feedback submitted:", feedback);
-    alert(
-      `Thank you for your feedback!\nRating: ${feedbackRating}/5\nMessage: ${feedbackMessage}`
-    );
+  const handleFeedbackSubmit = async () => {
+    setIsSubmittingFeedback(true);
+    setFeedbackStatus("idle");
 
-    // Reset and close
-    setFeedbackMessage("");
-    setFeedbackRating(0);
-    setIsFeedbackOpen(false);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key:
+            process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ||
+            "YOUR_ACCESS_KEY_HERE",
+          subject: "New Feedback from salaris.fyi",
+          from_name: "salaris.fyi Feedback",
+          message: `Rating: ${feedbackRating}/5\n\nFeedback:\n${feedbackMessage}`,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setFeedbackStatus("success");
+        setFeedbackMessage("");
+        setFeedbackRating(0);
+        setTimeout(() => {
+          setFeedbackStatus("idle");
+          setIsFeedbackOpen(false);
+        }, 2000);
+      } else {
+        setFeedbackStatus("error");
+      }
+    } catch (error) {
+      console.error("Feedback submission error:", error);
+      setFeedbackStatus("error");
+    } finally {
+      setIsSubmittingFeedback(false);
+    }
   };
 
   // Format currency
@@ -293,7 +318,7 @@ export default function PayScope() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-[#80A1BA] to-[#5A7A8A] bg-clip-text text-transparent mb-2">
-              raise.info
+              salaris.fyi
             </h1>
             <p className="text-lg text-gray-600">
               Discover salary insights across various companies
@@ -680,7 +705,7 @@ export default function PayScope() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="text-gray-500 text-sm">
-              © 2024 raise.info. All rights reserved.
+              © 2024 salaris.fyi. All rights reserved.
             </div>
             <div className="flex gap-6 text-sm">
               <Link href="/" className="text-[#80A1BA] font-medium">
@@ -802,13 +827,30 @@ export default function PayScope() {
               />
             </div>
 
+            {/* Status Messages */}
+            {feedbackStatus === "success" && (
+              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">
+                Thank you! Your feedback has been sent successfully.
+              </div>
+            )}
+
+            {feedbackStatus === "error" && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+                Oops! Something went wrong. Please try again.
+              </div>
+            )}
+
             {/* Submit Button */}
             <button
               onClick={handleFeedbackSubmit}
-              disabled={feedbackRating === 0 || feedbackMessage.trim() === ""}
+              disabled={
+                feedbackRating === 0 ||
+                feedbackMessage.trim() === "" ||
+                isSubmittingFeedback
+              }
               className="w-full bg-[#80A1BA] text-white py-2 px-4 rounded-md hover:bg-[#6B8BA0] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
             >
-              Submit Feedback
+              {isSubmittingFeedback ? "Sending..." : "Submit Feedback"}
             </button>
           </div>
         </div>

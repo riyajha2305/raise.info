@@ -28,8 +28,8 @@ export default function ContactUs() {
         name: formData.name,
         email: formData.email,
         message: formData.message,
-        from_name: "raise.info Contact Form",
-        subject: "New Contact Form Submission from raise.info",
+        from_name: "salaris.fyi Contact Form",
+        subject: "New Contact Form Submission from salaris.fyi",
       };
 
       console.log("Submitting form with payload:", {
@@ -83,7 +83,7 @@ export default function ContactUs() {
           <div className="text-center">
             <Link href="/">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-[#80A1BA] to-[#5A7A8A] bg-clip-text text-transparent mb-2 cursor-pointer hover:opacity-80 transition-opacity">
-                raise.info
+                salaris.fyi
               </h1>
             </Link>
             <p className="text-lg text-gray-600">
@@ -211,7 +211,7 @@ export default function ContactUs() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="text-gray-500 text-sm">
-              © 2024 raise.info. All rights reserved.
+              © 2024 salaris.fyi. All rights reserved.
             </div>
             <div className="flex gap-6 text-sm">
               <Link

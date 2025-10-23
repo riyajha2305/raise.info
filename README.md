@@ -1,4 +1,4 @@
-# raise.info 📈
+# salaris.fyi 📈
 
 > Discover salary insights and compensation data across top companies
 
@@ -39,12 +39,14 @@ A modern web application that provides transparent salary insights to help profe
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
-   git clone https://github.com/yourusername/raise.info.git
-   cd raise.info
+   git clone https://github.com/yourusername/salaris.fyi.git
+   cd salaris.fyi
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -52,6 +54,7 @@ A modern web application that provides transparent salary insights to help profe
 3. **Set up environment variables**
 
    Create a `.env.local` file in the root directory:
+
    ```env
    NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_access_key_here
    ```
@@ -59,6 +62,7 @@ A modern web application that provides transparent salary insights to help profe
    Get your free access key from [Web3Forms](https://web3forms.com)
 
 4. **Run the development server**
+
    ```bash
    npm run dev
    ```
@@ -91,7 +95,7 @@ For detailed instructions, see [CONTACT_FORM_SETUP.md](./CONTACT_FORM_SETUP.md)
 ## 📁 Project Structure
 
 ```
-raise.info/
+salaris.fyi/
 ├── src/
 │   ├── app/
 │   │   ├── about/          # About Us page
@@ -139,6 +143,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 📬 Contact
 
 For questions or feedback, please reach out:
+
 - Email: ssaswat786@gmail.com
 - Use the [contact form](http://localhost:3000/contact) on the website
 

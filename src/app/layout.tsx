@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "raise.info - Salary Insights Across Top Companies",
-  description: "Discover salary insights and compensation data across top tech companies. Filter by company, location, designation, and experience level.",
+  title: "salaris.fyi - Salary Insights Across Top Companies",
+  description:
+    "Discover salary insights and compensation data across top tech companies. Filter by company, location, designation, and experience level.",
 };
 
 export default function RootLayout({
