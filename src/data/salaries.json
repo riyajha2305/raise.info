@@ -1,0 +1,416 @@
+[
+  {
+    "company_name": "Google",
+    "designation": "SWE II (L3)",
+    "location": "Bengaluru, IN",
+    "yoe": 3,
+    "min_salary": 3754232,
+    "max_salary": 3754232,
+    "avg_salary": 3754232,
+    "reports": 0
+  },
+  {
+    "company_name": "Google",
+    "designation": "SWE III (L4)",
+    "location": "India",
+    "yoe": 3,
+    "min_salary": 6689885,
+    "max_salary": 6689885,
+    "avg_salary": 6689885,
+    "reports": 0
+  },
+  {
+    "company_name": "Google",
+    "designation": "Senior SWE (L5)",
+    "location": "Bengaluru, IN",
+    "yoe": 6,
+    "min_salary": 10720804,
+    "max_salary": 10720804,
+    "avg_salary": 10720804,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Microsoft",
+    "designation": "Senior SDE",
+    "location": "Hyderabad, IN",
+    "yoe": 6,
+    "min_salary": 7587253,
+    "max_salary": 7587253,
+    "avg_salary": 7587253,
+    "reports": 0
+  },
+  {
+    "company_name": "Microsoft",
+    "designation": "Software Engineer (59-60) – median",
+    "location": "Hyderabad, IN",
+    "yoe": 1,
+    "min_salary": 5910000,
+    "max_salary": 5910000,
+    "avg_salary": 5910000,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Amazon",
+    "designation": "SDE I (L4)",
+    "location": "India",
+    "yoe": 0,
+    "min_salary": 2810000,
+    "max_salary": 2810000,
+    "avg_salary": 2810000,
+    "reports": 0
+  },
+  {
+    "company_name": "Amazon",
+    "designation": "SDE II (L5)",
+    "location": "India",
+    "yoe": 3,
+    "min_salary": 5640000,
+    "max_salary": 5640000,
+    "avg_salary": 5640000,
+    "reports": 0
+  },
+  {
+    "company_name": "Amazon",
+    "designation": "SDE III (L6)",
+    "location": "India",
+    "yoe": 7,
+    "min_salary": 12240000,
+    "max_salary": 12240000,
+    "avg_salary": 12240000,
+    "reports": 0
+  },
+  {
+    "company_name": "Amazon",
+    "designation": "Principal SDE (L7)",
+    "location": "India",
+    "yoe": 10,
+    "min_salary": 18512934,
+    "max_salary": 18512934,
+    "avg_salary": 18512934,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Flipkart",
+    "designation": "SDE 1",
+    "location": "Bengaluru, IN",
+    "yoe": 0,
+    "min_salary": 2450000,
+    "max_salary": 2450000,
+    "avg_salary": 2450000,
+    "reports": 0
+  },
+  {
+    "company_name": "Flipkart",
+    "designation": "SDE 2",
+    "location": "Bengaluru, IN",
+    "yoe": 3,
+    "min_salary": 3240000,
+    "max_salary": 3240000,
+    "avg_salary": 3240000,
+    "reports": 0
+  },
+  {
+    "company_name": "Flipkart",
+    "designation": "SDE 3",
+    "location": "Bengaluru, IN",
+    "yoe": 6,
+    "min_salary": 5030000,
+    "max_salary": 5030000,
+    "avg_salary": 5030000,
+    "reports": 0
+  },
+  {
+    "company_name": "Flipkart",
+    "designation": "SDE 4 (Tech Lead)",
+    "location": "Bengaluru, IN",
+    "yoe": 9,
+    "min_salary": 6660000,
+    "max_salary": 6660000,
+    "avg_salary": 6660000,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Uber",
+    "designation": "Software Engineer I",
+    "location": "India",
+    "yoe": 0,
+    "min_salary": 3383898,
+    "max_salary": 3383898,
+    "avg_salary": 3383898,
+    "reports": 0
+  },
+  {
+    "company_name": "Uber",
+    "designation": "Software Engineer II",
+    "location": "India",
+    "yoe": 3,
+    "min_salary": 6840000,
+    "max_salary": 6840000,
+    "avg_salary": 6840000,
+    "reports": 0
+  },
+  {
+    "company_name": "Uber",
+    "designation": "Senior Software Engineer",
+    "location": "India",
+    "yoe": 6,
+    "min_salary": 13152433,
+    "max_salary": 13152433,
+    "avg_salary": 13152433,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Walmart Global Tech",
+    "designation": "Software Engineer III (L3)",
+    "location": "India",
+    "yoe": 3,
+    "min_salary": 3320000,
+    "max_salary": 3320000,
+    "avg_salary": 3320000,
+    "reports": 0
+  },
+  {
+    "company_name": "Walmart Global Tech",
+    "designation": "Senior Software Engineer (L4) – median",
+    "location": "Bengaluru, IN",
+    "yoe": 5,
+    "min_salary": 5280000,
+    "max_salary": 5280000,
+    "avg_salary": 5280000,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Atlassian",
+    "designation": "Junior Engineer (P30)",
+    "location": "Bengaluru, IN",
+    "yoe": 0,
+    "min_salary": 4040000,
+    "max_salary": 4040000,
+    "avg_salary": 4040000,
+    "reports": 0
+  },
+  {
+    "company_name": "Atlassian",
+    "designation": "Engineer (P40)",
+    "location": "Bengaluru, IN",
+    "yoe": 3,
+    "min_salary": 7135933,
+    "max_salary": 7135933,
+    "avg_salary": 7135933,
+    "reports": 0
+  },
+  {
+    "company_name": "Atlassian",
+    "designation": "Senior Engineer (P50)",
+    "location": "Bengaluru, IN",
+    "yoe": 6,
+    "min_salary": 11300000,
+    "max_salary": 11300000,
+    "avg_salary": 11300000,
+    "reports": 0
+  },
+
+  {
+    "company_name": "PhonePe",
+    "designation": "Software Engineer 1",
+    "location": "India",
+    "yoe": 0,
+    "min_salary": 2680000,
+    "max_salary": 2680000,
+    "avg_salary": 2680000,
+    "reports": 0
+  },
+  {
+    "company_name": "PhonePe",
+    "designation": "Software Engineer 2",
+    "location": "India",
+    "yoe": 3,
+    "min_salary": 4870000,
+    "max_salary": 4870000,
+    "avg_salary": 4870000,
+    "reports": 0
+  },
+  {
+    "company_name": "PhonePe",
+    "designation": "Senior Software Engineer",
+    "location": "India",
+    "yoe": 6,
+    "min_salary": 7930000,
+    "max_salary": 7930000,
+    "avg_salary": 7930000,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Adobe",
+    "designation": "Software Engineer 2 (P20)",
+    "location": "India",
+    "yoe": 2,
+    "min_salary": 2968895,
+    "max_salary": 2968895,
+    "avg_salary": 2968895,
+    "reports": 0
+  },
+  {
+    "company_name": "Adobe",
+    "designation": "Software Engineer 3 (P30)",
+    "location": "India",
+    "yoe": 4,
+    "min_salary": 5238933,
+    "max_salary": 5238933,
+    "avg_salary": 5238933,
+    "reports": 0
+  },
+  {
+    "company_name": "Adobe",
+    "designation": "Software Engineer 4 (P40)",
+    "location": "India",
+    "yoe": 6,
+    "min_salary": 6647548,
+    "max_salary": 6647548,
+    "avg_salary": 6647548,
+    "reports": 0
+  },
+  {
+    "company_name": "Adobe",
+    "designation": "Software Engineer 5 (P50)",
+    "location": "India",
+    "yoe": 8,
+    "min_salary": 11507664,
+    "max_salary": 11507664,
+    "avg_salary": 11507664,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Salesforce",
+    "designation": "Associate MTS",
+    "location": "India",
+    "yoe": 0,
+    "min_salary": 2790000,
+    "max_salary": 2790000,
+    "avg_salary": 2790000,
+    "reports": 0
+  },
+  {
+    "company_name": "Salesforce",
+    "designation": "MTS (Software Engineer) – median",
+    "location": "India",
+    "yoe": 2,
+    "min_salary": 4820038,
+    "max_salary": 4820038,
+    "avg_salary": 4820038,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Oracle",
+    "designation": "IC-2 (Member of Technical Staff)",
+    "location": "India",
+    "yoe": 2,
+    "min_salary": 3293358,
+    "max_salary": 3293358,
+    "avg_salary": 3293358,
+    "reports": 0
+  },
+  {
+    "company_name": "Oracle",
+    "designation": "IC-3 (Senior MTS)",
+    "location": "India",
+    "yoe": 4,
+    "min_salary": 3738334,
+    "max_salary": 3738334,
+    "avg_salary": 3738334,
+    "reports": 0
+  },
+  {
+    "company_name": "Oracle",
+    "designation": "IC-4",
+    "location": "India",
+    "yoe": 6,
+    "min_salary": 7012678,
+    "max_salary": 7012678,
+    "avg_salary": 7012678,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Razorpay",
+    "designation": "Software Engineer",
+    "location": "India",
+    "yoe": 1,
+    "min_salary": 2178682,
+    "max_salary": 2178682,
+    "avg_salary": 2178682,
+    "reports": 0
+  },
+  {
+    "company_name": "Razorpay",
+    "designation": "Lead Software Engineer",
+    "location": "India",
+    "yoe": 7,
+    "min_salary": 5346272,
+    "max_salary": 5346272,
+    "avg_salary": 5346272,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Swiggy",
+    "designation": "Software Engineer I (L6)",
+    "location": "India",
+    "yoe": 0,
+    "min_salary": 2064814,
+    "max_salary": 2064814,
+    "avg_salary": 2064814,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Zomato",
+    "designation": "Software Engineer – median",
+    "location": "India",
+    "yoe": 2,
+    "min_salary": 4050000,
+    "max_salary": 4050000,
+    "avg_salary": 4050000,
+    "reports": 0
+  },
+
+  {
+    "company_name": "Freshworks",
+    "designation": "Software Engineer (Entry)",
+    "location": "India",
+    "yoe": 0,
+    "min_salary": 1319283,
+    "max_salary": 1319283,
+    "avg_salary": 1319283,
+    "reports": 0
+  },
+  {
+    "company_name": "Freshworks",
+    "designation": "Senior Software Engineer",
+    "location": "India",
+    "yoe": 5,
+    "min_salary": 2650000,
+    "max_salary": 2650000,
+    "avg_salary": 2650000,
+    "reports": 0
+  },
+  {
+    "company_name": "Freshworks",
+    "designation": "Lead Software Engineer",
+    "location": "India",
+    "yoe": 7,
+    "min_salary": 4710000,
+    "max_salary": 4710000,
+    "avg_salary": 4710000,
+    "reports": 0
+  }
+]
