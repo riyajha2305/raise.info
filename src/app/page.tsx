@@ -1,7 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo, useRef } from 'react';
-import salariesData from '@/data/salaries.json';
+import { useState, useEffect, useMemo, useRef } from "react";
+import Link from "next/link";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import salariesData from "@/data/salaries.json";
 
 interface SalaryData {
   company_name: string;
@@ -20,7 +23,9 @@ interface Filters {
   companyName: string;
   location: string;
   designation: string;
-  yoe: number | '';
+  yoe: number | "";
+  salaryMin: number;
+  salaryMax: number;
 }
 
 interface FeedbackData {
@@ -29,24 +34,35 @@ interface FeedbackData {
 }
 
 type SortField = keyof SalaryData;
-type SortDirection = 'asc' | 'desc';
+type SortDirection = "asc" | "desc";
 
 export default function PayScope() {
+  // Calculate salary range from data
+  const salaryRange = useMemo(() => {
+    const allSalaries = salaries.map((item) => item.avg_salary);
+    return {
+      min: Math.floor(Math.min(...allSalaries)),
+      max: Math.ceil(Math.max(...allSalaries)),
+    };
+  }, []);
+
   const [filters, setFilters] = useState<Filters>({
-    companyName: '',
-    location: '',
-    designation: '',
-    yoe: ''
+    companyName: "",
+    location: "",
+    designation: "",
+    yoe: "",
+    salaryMin: 0,
+    salaryMax: 100000000,
   });
 
-  const [sortField, setSortField] = useState<SortField>('avg_salary');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [sortField, setSortField] = useState<SortField>("avg_salary");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  
+
   // Feedback modal state
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
-  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [feedbackMessage, setFeedbackMessage] = useState("");
   const [feedbackRating, setFeedbackRating] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
 
@@ -56,29 +72,31 @@ export default function PayScope() {
   const autocompleteRef = useRef<HTMLDivElement>(null);
 
   // Get unique values for dropdowns
-  const uniqueCompanies = useMemo(() => 
-    Array.from(new Set(salaries.map(item => item.company_name))).sort(), 
+  const uniqueCompanies = useMemo(
+    () => Array.from(new Set(salaries.map((item) => item.company_name))).sort(),
     []
   );
-  
-  const uniqueLocations = useMemo(() => 
-    Array.from(new Set(salaries.map(item => item.location))).sort(), 
+
+  const uniqueLocations = useMemo(
+    () => Array.from(new Set(salaries.map((item) => item.location))).sort(),
     []
   );
-  
-  const uniqueDesignations = useMemo(() => 
-    Array.from(new Set(salaries.map(item => item.designation))).sort(), 
+
+  const uniqueDesignations = useMemo(
+    () => Array.from(new Set(salaries.map((item) => item.designation))).sort(),
     []
   );
 
   // Handle company name autocomplete
   useEffect(() => {
     if (filters.companyName) {
-      const filtered = uniqueCompanies.filter(company =>
+      const filtered = uniqueCompanies.filter((company) =>
         company.toLowerCase().includes(filters.companyName.toLowerCase())
       );
       setFilteredCompanies(filtered);
-      setShowAutocomplete(filtered.length > 0 && filters.companyName.length > 0);
+      setShowAutocomplete(
+        filtered.length > 0 && filters.companyName.length > 0
+      );
     } else {
       setShowAutocomplete(false);
     }
@@ -87,41 +105,57 @@ export default function PayScope() {
   // Close autocomplete when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target as Node)) {
+      if (
+        autocompleteRef.current &&
+        !autocompleteRef.current.contains(event.target as Node)
+      ) {
         setShowAutocomplete(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Filter and sort data
   const filteredAndSortedData = useMemo(() => {
-    let filtered = salaries.filter(item => {
-      const matchesCompany = item.company_name.toLowerCase().includes(filters.companyName.toLowerCase());
-      const matchesLocation = filters.location === '' || item.location === filters.location;
-      const matchesDesignation = filters.designation === '' || item.designation === filters.designation;
-      const matchesYoe = filters.yoe === '' || item.yoe === filters.yoe;
+    let filtered = salaries.filter((item) => {
+      const matchesCompany = item.company_name
+        .toLowerCase()
+        .includes(filters.companyName.toLowerCase());
+      const matchesLocation =
+        filters.location === "" || item.location === filters.location;
+      const matchesDesignation =
+        filters.designation === "" || item.designation === filters.designation;
+      const matchesYoe = filters.yoe === "" || item.yoe === filters.yoe;
+      const matchesSalary =
+        item.avg_salary >= filters.salaryMin &&
+        item.avg_salary <= filters.salaryMax;
 
-      return matchesCompany && matchesLocation && matchesDesignation && matchesYoe;
+      return (
+        matchesCompany &&
+        matchesLocation &&
+        matchesDesignation &&
+        matchesYoe &&
+        matchesSalary
+      );
     });
 
     // Sort data
     filtered.sort((a, b) => {
       const aValue = a[sortField];
       const bValue = b[sortField];
-      
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        return sortDirection === 'asc' 
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortDirection === "asc"
           ? aValue.localeCompare(bValue)
           : bValue.localeCompare(aValue);
       }
-      
-      if (typeof aValue === 'number' && typeof bValue === 'number') {
-        return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+
+      if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortDirection === "asc" ? aValue - bValue : bValue - aValue;
       }
-      
+
       return 0;
     });
 
@@ -137,23 +171,23 @@ export default function PayScope() {
   // Handle sort
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortDirection('asc');
+      setSortDirection("asc");
     }
     setCurrentPage(1);
   };
 
   // Handle filter changes
   const handleFilterChange = (key: keyof Filters, value: string | number) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
     setCurrentPage(1);
   };
 
   // Handle company selection from autocomplete
   const handleCompanySelect = (company: string) => {
-    setFilters(prev => ({ ...prev, companyName: company }));
+    setFilters((prev) => ({ ...prev, companyName: company }));
     setShowAutocomplete(false);
     setCurrentPage(1);
   };
@@ -161,11 +195,23 @@ export default function PayScope() {
   // Reset filters
   const resetFilters = () => {
     setFilters({
-      companyName: '',
-      location: '',
-      designation: '',
-      yoe: ''
+      companyName: "",
+      location: "",
+      designation: "",
+      yoe: "",
+      salaryMin: salaryRange.min,
+      salaryMax: salaryRange.max,
     });
+    setCurrentPage(1);
+  };
+
+  // Handle salary range change
+  const handleSalaryRangeChange = (values: number[]) => {
+    setFilters((prev) => ({
+      ...prev,
+      salaryMin: values[0],
+      salaryMax: values[1],
+    }));
     setCurrentPage(1);
   };
 
@@ -173,22 +219,24 @@ export default function PayScope() {
   const handleFeedbackSubmit = () => {
     const feedback: FeedbackData = {
       message: feedbackMessage,
-      rating: feedbackRating
+      rating: feedbackRating,
     };
-    console.log('Feedback submitted:', feedback);
-    alert(`Thank you for your feedback!\nRating: ${feedbackRating}/5\nMessage: ${feedbackMessage}`);
-    
+    console.log("Feedback submitted:", feedback);
+    alert(
+      `Thank you for your feedback!\nRating: ${feedbackRating}/5\nMessage: ${feedbackMessage}`
+    );
+
     // Reset and close
-    setFeedbackMessage('');
+    setFeedbackMessage("");
     setFeedbackRating(0);
     setIsFeedbackOpen(false);
   };
 
   // Format currency
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
       maximumFractionDigits: 0,
     }).format(amount);
   };
@@ -208,17 +256,30 @@ export default function PayScope() {
     const isActive = sortField === field;
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4">
-        <svg 
-          className={`w-3 h-3 transition-colors ${isActive ? 'text-[#80A1BA]' : 'text-gray-400 group-hover:text-gray-600'}`} 
-          fill="none" 
-          stroke="currentColor" 
+        <svg
+          className={`w-3 h-3 transition-colors ${
+            isActive
+              ? "text-[#80A1BA]"
+              : "text-gray-400 group-hover:text-gray-600"
+          }`}
+          fill="none"
+          stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
+          />
         </svg>
         {isActive && (
-          <div className={`text-xs font-bold ${sortDirection === 'asc' ? 'text-[#80A1BA]' : 'text-[#80A1BA]'}`}>
-            {sortDirection === 'asc' ? '↑' : '↓'}
+          <div
+            className={`text-xs font-bold ${
+              sortDirection === "asc" ? "text-[#80A1BA]" : "text-[#80A1BA]"
+            }`}
+          >
+            {sortDirection === "asc" ? "↑" : "↓"}
           </div>
         )}
       </div>
@@ -231,8 +292,12 @@ export default function PayScope() {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-[#80A1BA] to-[#5A7A8A] bg-clip-text text-transparent mb-2">raise.info</h1>
-            <p className="text-lg text-gray-600">Discover salary insights across top companies</p>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-[#80A1BA] to-[#5A7A8A] bg-clip-text text-transparent mb-2">
+              raise.info
+            </h1>
+            <p className="text-lg text-gray-600">
+              Discover salary insights across various companies
+            </p>
           </div>
         </div>
       </header>
@@ -243,13 +308,20 @@ export default function PayScope() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Company Name with Autocomplete */}
             <div className="relative" ref={autocompleteRef}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Company
+              </label>
               <input
                 type="text"
                 placeholder="Search company..."
                 value={filters.companyName}
-                onChange={(e) => handleFilterChange('companyName', e.target.value)}
-                onFocus={() => filters.companyName && setShowAutocomplete(filteredCompanies.length > 0)}
+                onChange={(e) =>
+                  handleFilterChange("companyName", e.target.value)
+                }
+                onFocus={() =>
+                  filters.companyName &&
+                  setShowAutocomplete(filteredCompanies.length > 0)
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80A1BA] focus:border-transparent text-gray-900 placeholder-gray-500"
               />
               {showAutocomplete && filteredCompanies.length > 0 && (
@@ -269,47 +341,104 @@ export default function PayScope() {
 
             {/* Location */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Location
+              </label>
               <select
                 value={filters.location}
-                onChange={(e) => handleFilterChange('location', e.target.value)}
+                onChange={(e) => handleFilterChange("location", e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80A1BA] focus:border-transparent text-gray-900"
               >
                 <option value="">All Locations</option>
-                {uniqueLocations.map(location => (
-                  <option key={location} value={location}>{location}</option>
+                {uniqueLocations.map((location) => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
                 ))}
               </select>
             </div>
 
             {/* Designation */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Designation</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Designation
+              </label>
               <select
                 value={filters.designation}
-                onChange={(e) => handleFilterChange('designation', e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("designation", e.target.value)
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80A1BA] focus:border-transparent text-gray-900"
               >
                 <option value="">All Designations</option>
-                {uniqueDesignations.map(designation => (
-                  <option key={designation} value={designation}>{designation}</option>
+                {uniqueDesignations.map((designation) => (
+                  <option key={designation} value={designation}>
+                    {designation}
+                  </option>
                 ))}
               </select>
             </div>
 
             {/* Years of Experience */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Years of Exp</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Years of Exp
+              </label>
               <select
                 value={filters.yoe}
-                onChange={(e) => handleFilterChange('yoe', e.target.value === '' ? '' : parseInt(e.target.value))}
+                onChange={(e) =>
+                  handleFilterChange(
+                    "yoe",
+                    e.target.value === "" ? "" : parseInt(e.target.value)
+                  )
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80A1BA] focus:border-transparent text-gray-900"
               >
                 <option value="">All Levels</option>
-                {[1, 2, 3, 4, 5, 6, 7].map(yoe => (
-                  <option key={yoe} value={yoe}>{yoe} years</option>
+                {[1, 2, 3, 4, 5, 6, 7].map((yoe) => (
+                  <option key={yoe} value={yoe}>
+                    {yoe} years
+                  </option>
                 ))}
               </select>
+            </div>
+          </div>
+
+          {/* Salary Range Filter */}
+          <div className="mt-6">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Salary Range (Average)
+            </label>
+            <div className="px-2">
+              <Slider
+                range
+                min={salaryRange.min}
+                max={salaryRange.max}
+                value={[filters.salaryMin, filters.salaryMax]}
+                onChange={(value) => handleSalaryRangeChange(value as number[])}
+                styles={{
+                  track: { backgroundColor: "#80A1BA", height: 6 },
+                  rail: { backgroundColor: "#e5e7eb", height: 6 },
+                  handle: {
+                    backgroundColor: "#80A1BA",
+                    borderColor: "#80A1BA",
+                    width: 20,
+                    height: 20,
+                    marginTop: -7,
+                    opacity: 1,
+                  },
+                }}
+              />
+              <div className="flex justify-between items-center mt-3">
+                <div className="text-sm text-gray-700">
+                  <span className="font-medium">Min:</span>{" "}
+                  {formatCurrencyCompact(filters.salaryMin)}
+                </div>
+                <div className="text-sm text-gray-700">
+                  <span className="font-medium">Max:</span>{" "}
+                  {formatCurrencyCompact(filters.salaryMax)}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -322,7 +451,11 @@ export default function PayScope() {
               Reset Filters
             </button>
             <div className="text-sm text-gray-600 flex items-center">
-              Showing <span className="font-semibold mx-1">{filteredAndSortedData.length}</span> results
+              Showing{" "}
+              <span className="font-semibold mx-1">
+                {filteredAndSortedData.length}
+              </span>{" "}
+              results
             </div>
           </div>
         </div>
@@ -332,11 +465,23 @@ export default function PayScope() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {currentData.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="mx-auto h-12 w-12 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             <div className="text-gray-500 text-lg mt-4">No results found</div>
-            <p className="text-gray-400 mt-2">Try adjusting your filters to see more results</p>
+            <p className="text-gray-400 mt-2">
+              Try adjusting your filters to see more results
+            </p>
           </div>
         ) : (
           <>
@@ -348,7 +493,7 @@ export default function PayScope() {
                     <tr>
                       <th
                         className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-48"
-                        onClick={() => handleSort('company_name')}
+                        onClick={() => handleSort("company_name")}
                       >
                         <div className="flex items-center justify-between w-full">
                           <span className="flex-1">Company</span>
@@ -357,7 +502,7 @@ export default function PayScope() {
                       </th>
                       <th
                         className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-40"
-                        onClick={() => handleSort('designation')}
+                        onClick={() => handleSort("designation")}
                       >
                         <div className="flex items-center justify-between w-full">
                           <span className="flex-1">Designation</span>
@@ -366,7 +511,7 @@ export default function PayScope() {
                       </th>
                       <th
                         className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                        onClick={() => handleSort('location')}
+                        onClick={() => handleSort("location")}
                       >
                         <div className="flex items-center justify-between w-full">
                           <span className="flex-1">Location</span>
@@ -375,7 +520,7 @@ export default function PayScope() {
                       </th>
                       <th
                         className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-20"
-                        onClick={() => handleSort('yoe')}
+                        onClick={() => handleSort("yoe")}
                       >
                         <div className="flex items-center justify-between w-full">
                           <span className="flex-1">YOE</span>
@@ -384,7 +529,7 @@ export default function PayScope() {
                       </th>
                       <th
                         className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                        onClick={() => handleSort('min_salary')}
+                        onClick={() => handleSort("min_salary")}
                       >
                         <div className="flex items-center justify-between w-full">
                           <span className="flex-1">Min Salary</span>
@@ -393,7 +538,7 @@ export default function PayScope() {
                       </th>
                       <th
                         className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                        onClick={() => handleSort('max_salary')}
+                        onClick={() => handleSort("max_salary")}
                       >
                         <div className="flex items-center justify-between w-full">
                           <span className="flex-1">Max Salary</span>
@@ -402,7 +547,7 @@ export default function PayScope() {
                       </th>
                       <th
                         className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                        onClick={() => handleSort('avg_salary')}
+                        onClick={() => handleSort("avg_salary")}
                       >
                         <div className="flex items-center justify-between w-full">
                           <span className="flex-1">Avg Salary</span>
@@ -411,7 +556,7 @@ export default function PayScope() {
                       </th>
                       <th
                         className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-24"
-                        onClick={() => handleSort('reports')}
+                        onClick={() => handleSort("reports")}
                       >
                         <div className="flex items-center justify-between w-full">
                           <span className="flex-1">Reports</span>
@@ -427,17 +572,26 @@ export default function PayScope() {
                         className="hover:bg-blue-50 hover:shadow-sm transition-all duration-150"
                       >
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900 truncate max-w-[180px]" title={item.company_name}>
+                          <div
+                            className="text-sm font-medium text-gray-900 truncate max-w-[180px]"
+                            title={item.company_name}
+                          >
                             {item.company_name}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          <div className="truncate max-w-[140px]" title={item.designation}>
+                          <div
+                            className="truncate max-w-[140px]"
+                            title={item.designation}
+                          >
                             {item.designation}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          <div className="truncate max-w-[120px]" title={item.location}>
+                          <div
+                            className="truncate max-w-[120px]"
+                            title={item.location}
+                          >
                             {item.location}
                           </div>
                         </td>
@@ -467,33 +621,48 @@ export default function PayScope() {
             {totalPages > 1 && (
               <div className="mt-6 flex items-center justify-between">
                 <div className="text-sm text-gray-700">
-                  Showing <span className="font-semibold">{startIndex + 1}</span> to <span className="font-semibold">{Math.min(endIndex, filteredAndSortedData.length)}</span> of <span className="font-semibold">{filteredAndSortedData.length}</span> results
+                  Showing{" "}
+                  <span className="font-semibold">{startIndex + 1}</span> to{" "}
+                  <span className="font-semibold">
+                    {Math.min(endIndex, filteredAndSortedData.length)}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-semibold">
+                    {filteredAndSortedData.length}
+                  </span>{" "}
+                  results
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
                     disabled={currentPage === 1}
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     Previous
                   </button>
-                  
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                        page === currentPage
-                          ? 'bg-[#80A1BA] text-white shadow-md'
-                          : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
-                  
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                          page === currentPage
+                            ? "bg-[#80A1BA] text-white shadow-md"
+                            : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-50"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
+
                   <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
                     disabled={currentPage === totalPages}
                     className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
@@ -509,8 +678,27 @@ export default function PayScope() {
       {/* Footer */}
       <footer className="bg-white border-t mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="text-center text-gray-500 text-sm">
-            © 2024 raise.info. All rights reserved. Salary data is for informational purposes only.
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="text-gray-500 text-sm">
+              © 2024 raise.info. All rights reserved.
+            </div>
+            <div className="flex gap-6 text-sm">
+              <Link href="/" className="text-[#80A1BA] font-medium">
+                Home
+              </Link>
+              <Link
+                href="/about"
+                className="text-gray-600 hover:text-[#80A1BA] transition-colors"
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-600 hover:text-[#80A1BA] transition-colors"
+              >
+                Contact
+              </Link>
+            </div>
           </div>
         </div>
       </footer>
@@ -520,8 +708,18 @@ export default function PayScope() {
         onClick={() => setIsFeedbackOpen(true)}
         className="fixed bottom-6 right-6 bg-[#80A1BA] text-white px-5 py-3 rounded-full shadow-lg hover:bg-[#6B8BA0] hover:shadow-xl transition-all duration-300 flex items-center gap-2 group z-40"
       >
-        <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+        <svg
+          className="w-5 h-5 group-hover:scale-110 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+          />
         </svg>
         <span className="font-medium">Feedback</span>
       </button>
@@ -531,20 +729,34 @@ export default function PayScope() {
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-10 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 transform transition-all">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">Share Your Feedback</h2>
+              <h2 className="text-2xl font-bold text-gray-900">
+                Share Your Feedback
+              </h2>
               <button
                 onClick={() => setIsFeedbackOpen(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
 
             {/* Rating */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Rate your experience</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Rate your experience
+              </label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -557,8 +769,8 @@ export default function PayScope() {
                     <svg
                       className={`w-8 h-8 ${
                         star <= (hoveredStar || feedbackRating)
-                          ? 'text-yellow-400 fill-current'
-                          : 'text-gray-300'
+                          ? "text-yellow-400 fill-current"
+                          : "text-gray-300"
                       }`}
                       fill="none"
                       stroke="currentColor"
@@ -578,7 +790,9 @@ export default function PayScope() {
 
             {/* Feedback Message */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Your feedback</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Your feedback
+              </label>
               <textarea
                 value={feedbackMessage}
                 onChange={(e) => setFeedbackMessage(e.target.value)}
@@ -591,7 +805,7 @@ export default function PayScope() {
             {/* Submit Button */}
             <button
               onClick={handleFeedbackSubmit}
-              disabled={feedbackRating === 0 || feedbackMessage.trim() === ''}
+              disabled={feedbackRating === 0 || feedbackMessage.trim() === ""}
               className="w-full bg-[#80A1BA] text-white py-2 px-4 rounded-md hover:bg-[#6B8BA0] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium"
             >
               Submit Feedback
