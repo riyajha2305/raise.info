@@ -1,8 +1,46 @@
 @import "tailwindcss";
 
+/* Light Pastel Blue-Grey Design System */
 :root {
-  --background: #F0F0F0;
-  --foreground: #171717;
+  /* Light Pastel Blue-Grey Colors */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  
+  /* Background Colors - Light Theme */
+  --background: #f8fafc;
+  --foreground: #334155;
+  --card-background: #ffffff;
+  --card-foreground: #334155;
+  --border-color: #e2e8f0;
+  
+  /* Navbar Colors - Light Pastel */
+  --navbar-bg: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  --navbar-text: #334155;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+/* Force Light Theme - Override Dark Mode */
+:root.dark {
+  --background: #f8fafc !important;
+  --foreground: #334155 !important;
+  --card-background: #ffffff !important;
+  --card-foreground: #334155 !important;
+  --border-color: #e2e8f0 !important;
+  --navbar-bg: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%) !important;
+  --navbar-text: #334155 !important;
 }
 
 @theme inline {
@@ -12,8 +50,188 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #f8fafc !important;
+  color: #334155 !important;
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Force Light Theme - Override all dark mode styles */
+.dark {
+  --background: #f8fafc !important;
+  --foreground: #334155 !important;
+  --card-background: #ffffff !important;
+  --card-foreground: #334155 !important;
+  --border-color: #e2e8f0 !important;
+  --navbar-bg: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%) !important;
+  --navbar-text: #334155 !important;
+}
+
+.dark body {
+  background: #f8fafc !important;
+  color: #334155 !important;
+}
+
+/* Force Light Theme - Override all component dark mode styles */
+.dark .bg-white {
+  background-color: #ffffff !important;
+  color: #334155 !important;
+}
+
+.dark .text-gray-900 {
+  color: #334155 !important;
+}
+
+.dark .text-gray-700 {
+  color: #475569 !important;
+}
+
+.dark .text-gray-600 {
+  color: #64748b !important;
+}
+
+.dark .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+.dark .border-gray-200,
+.dark .border-gray-300 {
+  border-color: #e2e8f0 !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #f8fafc !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #f1f5f9 !important;
+}
+
+.dark .bg-gray-200 {
+  background-color: #e2e8f0 !important;
+}
+
+/* Force Light Theme - Override hover states */
+.dark .hover\:bg-gray-50:hover {
+  background-color: #f1f5f9 !important;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  background-color: #e2e8f0 !important;
+}
+
+.dark .hover\:bg-white:hover {
+  background-color: #f8fafc !important;
+}
+
+/* Custom utility classes */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+}
+
+.gradient-card {
+  background: linear-gradient(135deg, var(--card-background) 0%, var(--neutral-100) 100%);
+}
+
+.dark .gradient-card {
+  background: linear-gradient(135deg, var(--card-background) 0%, var(--neutral-800) 100%);
+}
+
+/* Animation utilities */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2;
+}
+
+.dark .focus-ring {
+  @apply focus:ring-offset-gray-800;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neutral-100);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--neutral-800);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--neutral-300);
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--neutral-600);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-400);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--neutral-500);
 }

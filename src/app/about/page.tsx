@@ -2,17 +2,24 @@ import Link from "next/link";
 
 export default function AboutUs() {
   return (
-    <div className="min-h-screen bg-[#F0F0F0]">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-[#80A1BA] shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <header className="bg-gradient-to-r from-slate-200 to-slate-300 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <Link href="/">
-              <h1 className="text-4xl font-bold text-[#F0F0F0] mb-2 cursor-pointer hover:opacity-80 transition-opacity">
+            <Link href="/" className="flex items-center justify-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg overflow-hidden">
+                <img 
+                  src="/icon.png" 
+                  alt="Salaris.fyi Logo" 
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <h1 className="text-4xl font-bold text-slate-700 cursor-pointer hover:text-slate-800 transition-colors">
                 salaris.fyi
               </h1>
             </Link>
-            <p className="text-lg text-[#F0F0F0]">
+            <p className="text-lg text-slate-600">
               Discover salary insights across various companies
             </p>
           </div>
@@ -22,14 +29,14 @@ export default function AboutUs() {
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white shadow-sm rounded-lg p-8">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-[#80A1BA] to-[#5A7A8A] bg-clip-text text-transparent mb-6">
+          <h2 className="text-4xl font-bold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent mb-6">
             About Us
           </h2>
 
           <div className="space-y-6 text-gray-700">
             <p className="text-lg leading-relaxed">
               Welcome to{" "}
-              <span className="font-semibold text-[#80A1BA]">salaris.fyi</span>,
+              <span className="font-semibold text-slate-600">salaris.fyi</span>,
               your trusted source for salary insights and compensation data
               across top companies.
             </p>
@@ -59,7 +66,7 @@ export default function AboutUs() {
               <div className="flex flex-col sm:flex-row gap-6">
                 {/* Team Member 1 */}
                 <div className="flex items-center gap-3 flex-1">
-                  <div className="w-12 h-12 rounded-full bg-[#80A1BA] flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-slate-500 flex items-center justify-center text-white font-bold text-lg">
                     R
                   </div>
                   <div className="flex-1">
@@ -70,7 +77,7 @@ export default function AboutUs() {
                       href="https://www.linkedin.com/in/riya-jha-7b4774210/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-[#80A1BA] hover:text-[#6B8BA0] flex items-center gap-1 transition-colors"
+                      className="text-sm text-slate-600 hover:text-slate-700 flex items-center gap-1 transition-colors"
                     >
                       <svg
                         className="w-4 h-4"
@@ -86,7 +93,7 @@ export default function AboutUs() {
 
                 {/* Team Member 2 */}
                 <div className="flex items-center gap-3 flex-1">
-                  <div className="w-12 h-12 rounded-full bg-[#80A1BA] flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-slate-500 flex items-center justify-center text-white font-bold text-lg">
                     S
                   </div>
                   <div className="flex-1">
@@ -95,7 +102,7 @@ export default function AboutUs() {
                       href="https://www.linkedin.com/in/saswatsam/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-[#80A1BA] hover:text-[#6B8BA0] flex items-center gap-1 transition-colors"
+                      className="text-sm text-slate-600 hover:text-slate-700 flex items-center gap-1 transition-colors"
                     >
                       <svg
                         className="w-4 h-4"
@@ -114,7 +121,7 @@ export default function AboutUs() {
             <div className="pt-6">
               <Link
                 href="/"
-                className="inline-block bg-[#80A1BA] text-white px-6 py-3 rounded-md hover:bg-[#6B8BA0] transition-colors font-medium"
+                className="inline-block bg-slate-500 text-white px-6 py-3 rounded-lg hover:bg-slate-600 transition-colors font-medium"
               >
                 Explore Salary Data
               </Link>
@@ -123,33 +130,6 @@ export default function AboutUs() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-[#80A1BA] border-t border-[#6B8BA0] mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="text-[#F0F0F0] text-sm">
-              © 2024 salaris.fyi. All rights reserved.
-            </div>
-            <div className="flex gap-6 text-sm">
-              <Link
-                href="/"
-                className="text-[#F0F0F0] hover:text-white transition-colors"
-              >
-                Home
-              </Link>
-              <Link href="/about" className="text-[#F0F0F0] font-medium hover:text-white transition-colors">
-                About
-              </Link>
-              <Link
-                href="/contact"
-                className="text-[#F0F0F0] hover:text-white transition-colors"
-              >
-                Contact
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

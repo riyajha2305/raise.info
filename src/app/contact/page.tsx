@@ -76,17 +76,24 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0F0F0]">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-[#80A1BA] shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <header className="bg-gradient-to-r from-slate-200 to-slate-300 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <Link href="/">
-              <h1 className="text-4xl font-bold text-[#F0F0F0] mb-2 cursor-pointer hover:opacity-80 transition-opacity">
+            <Link href="/" className="flex items-center justify-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg overflow-hidden">
+                <img
+                  src="/icon.png"
+                  alt="Salaris.fyi Logo"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <h1 className="text-4xl font-bold text-slate-700 cursor-pointer hover:text-slate-800 transition-colors">
                 salaris.fyi
               </h1>
             </Link>
-            <p className="text-lg text-[#F0F0F0]">
+            <p className="text-lg text-slate-600">
               Discover salary insights across various companies
             </p>
           </div>
@@ -96,7 +103,7 @@ export default function ContactUs() {
       {/* Main Content */}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white shadow-sm rounded-lg p-8">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-[#80A1BA] to-[#5A7A8A] bg-clip-text text-transparent mb-2 text-center">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent mb-2 text-center">
             Contact Us
           </h2>
 
@@ -139,7 +146,7 @@ export default function ContactUs() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80A1BA] focus:border-transparent text-gray-900 placeholder-gray-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500"
                 placeholder="Your name"
               />
             </div>
@@ -158,7 +165,7 @@ export default function ContactUs() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80A1BA] focus:border-transparent text-gray-900 placeholder-gray-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500"
                 placeholder="your.email@example.com"
               />
             </div>
@@ -198,7 +205,7 @@ export default function ContactUs() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-[#80A1BA] text-white py-3 px-6 rounded-md hover:bg-[#6B8BA0] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-slate-500 text-white py-3 px-6 rounded-lg hover:bg-slate-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? "Sending..." : "Send Message"}
             </button>
@@ -206,33 +213,34 @@ export default function ContactUs() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-[#80A1BA] border-t border-[#6B8BA0] mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="text-[#F0F0F0] text-sm">
-              © 2024 salaris.fyi. All rights reserved.
-            </div>
-            <div className="flex gap-6 text-sm">
-              <Link
-                href="/"
-                className="text-[#F0F0F0] hover:text-white transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                href="/about"
-                className="text-[#F0F0F0] hover:text-white transition-colors"
-              >
-                About
-              </Link>
-              <Link href="/contact" className="text-[#F0F0F0] font-medium hover:text-white transition-colors">
-                Contact
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
+
+{/* Footer */ }
+<footer className="bg-[#80A1BA] border-t border-[#6B8BA0] mt-12">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div className="text-[#F0F0F0] text-sm">
+        © 2024 salaris.fyi. All rights reserved.
+      </div>
+      <div className="flex gap-6 text-sm">
+        <Link
+          href="/"
+          className="text-[#F0F0F0] hover:text-white transition-colors"
+        >
+          Home
+        </Link>
+        <Link
+          href="/about"
+          className="text-[#F0F0F0] hover:text-white transition-colors"
+        >
+          About
+        </Link>
+        <Link href="/contact" className="text-[#F0F0F0] font-medium hover:text-white transition-colors">
+          Contact
+        </Link>
+      </div>
+    </div>
+  </div>
+</footer>
