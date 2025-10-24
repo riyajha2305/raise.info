@@ -252,7 +252,7 @@ export default function UniversityDataPage() {
   const [sortField, setSortField] = useState<SortField>("salary_avg");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(15);
 
   // Autocomplete state
   const [showAutocomplete, setShowAutocomplete] = useState(false);
@@ -262,10 +262,12 @@ export default function UniversityDataPage() {
   // Side panel state - open by default for first row
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
   const [selectedUniversityData, setSelectedUniversityData] = useState<UniversityData | null>(null);
+  const [selectedRowIndex, setSelectedRowIndex] = useState<number>(0); // Track selected row index
 
   // Handle row click to open side panel
-  const handleRowClick = (item: UniversityData) => {
+  const handleRowClick = (item: UniversityData, index: number) => {
     setSelectedUniversityData(item);
+    setSelectedRowIndex(index);
     setIsSidePanelOpen(true);
   };
 
@@ -390,6 +392,7 @@ export default function UniversityDataPage() {
   useEffect(() => {
     if (filteredAndSortedData.length > 0 && !selectedUniversityData) {
       setSelectedUniversityData(filteredAndSortedData[0]);
+      setSelectedRowIndex(0);
     }
   }, [filteredAndSortedData, selectedUniversityData]);
 
@@ -478,20 +481,11 @@ export default function UniversityDataPage() {
       <div className="bg-gradient-to-r from-slate-200 to-slate-300 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-lg overflow-hidden">
-                <img
-                  src="/icon.png"
-                  alt="Salaris.fyi Logo"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <h1 className="text-5xl font-bold text-slate-700">
-                University Data
-              </h1>
-            </div>
+            <h1 className="text-5xl font-bold text-slate-700 mb-4">
+              Which College Gets You Paid More?
+            </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Explore salary data by university, company, and role. Compare full-time and internship opportunities across top universities and tech companies.
+              Compare salaries by university. IIT vs NIT vs BITS - see who pays what.
             </p>
           </div>
         </div>
@@ -499,9 +493,9 @@ export default function UniversityDataPage() {
 
       {/* Filters Section */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           {/* Filter Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
                 <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -522,16 +516,16 @@ export default function UniversityDataPage() {
           </div>
 
           {/* Filter Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* University */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 University
               </label>
               <select
                 value={filters.university}
                 onChange={(e) => handleFilterChange("university", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Universities</option>
                 {uniqueUniversities.map((university) => (
@@ -544,7 +538,7 @@ export default function UniversityDataPage() {
 
             {/* Company with Autocomplete */}
             <div className="relative" ref={autocompleteRef}>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Company
               </label>
               <input
@@ -556,7 +550,7 @@ export default function UniversityDataPage() {
                   filters.company &&
                   setShowAutocomplete(filteredCompanies.length > 0)
                 }
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white transition-colors"
               />
               {showAutocomplete && filteredCompanies.length > 0 && (
                 <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
@@ -575,13 +569,13 @@ export default function UniversityDataPage() {
 
             {/* Role */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Role
               </label>
               <select
                 value={filters.role}
                 onChange={(e) => handleFilterChange("role", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Roles</option>
                 {uniqueRoles.map((role) => (
@@ -594,13 +588,13 @@ export default function UniversityDataPage() {
 
             {/* Employment Type */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Employment Type
               </label>
               <select
                 value={filters.employmentType}
                 onChange={(e) => handleFilterChange("employmentType", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Types</option>
                 <option value="Full-time">Full-time</option>
@@ -610,13 +604,13 @@ export default function UniversityDataPage() {
 
             {/* Location */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Location
               </label>
               <select
                 value={filters.location}
                 onChange={(e) => handleFilterChange("location", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Locations</option>
                 {uniqueLocations.map((location) => (
@@ -629,13 +623,13 @@ export default function UniversityDataPage() {
 
             {/* Year */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Year
               </label>
               <select
                 value={filters.year}
                 onChange={(e) => handleFilterChange("year", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Years</option>
                 {uniqueYears.map((year) => (
@@ -648,8 +642,8 @@ export default function UniversityDataPage() {
           </div>
 
           {/* Salary Range Slider */}
-          <div className="mt-6 bg-slate-50 rounded-xl p-6 border border-slate-200">
-            <div className="flex items-center justify-between mb-4">
+          <div className="mt-4 bg-slate-50 rounded-lg p-4 border border-slate-200">
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
                   <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -683,7 +677,7 @@ export default function UniversityDataPage() {
                 ]}
                 railStyle={{ backgroundColor: "#e2e8f0", height: 6 }}
               />
-              <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
+              <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
                 <span>Min: {formatCurrency(salaryRange.min)}</span>
                 <span>Max: {formatCurrency(salaryRange.max)}</span>
               </div>
@@ -709,7 +703,7 @@ export default function UniversityDataPage() {
       {/* Results Table */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Table and Side Panel Container */}
-        <div className={`flex gap-4 transition-all duration-500 ease-in-out ${isSidePanelOpen ? '' : ''}`}>
+        <div className={`flex gap-4 transition-all duration-500 ease-in-out min-h-[600px] ${isSidePanelOpen ? '' : ''}`}>
           {/* Table Section - 70% when panel is open, 100% when closed */}
           <div className={`transition-all duration-500 ease-in-out flex flex-col ${isSidePanelOpen ? 'w-[70%]' : 'w-full'}`}>
             {filteredAndSortedData.length === 0 ? (
@@ -733,9 +727,9 @@ export default function UniversityDataPage() {
                 </p>
               </div>
             ) : (
-               <div className="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200 flex-1 flex flex-col">
-                 <div className="overflow-x-auto flex-1">
-                   <table className="min-w-full divide-y divide-gray-200 h-full">
+                <div className="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200 flex-1 flex flex-col">
+                  <div className="overflow-x-auto flex-1 flex flex-col">
+                    <table className="min-w-full divide-y divide-gray-200 flex-1">
                     <thead className="bg-gradient-to-r from-slate-50 to-slate-100 sticky top-0">
                       <tr>
                         <th
@@ -825,8 +819,10 @@ export default function UniversityDataPage() {
                       {currentData.map((item, index) => (
                         <tr
                           key={`${item.university}-${item.company}-${item.role}-${index}`}
-                          className="hover:bg-slate-50 hover:shadow-sm transition-all duration-150 cursor-pointer"
-                          onClick={() => handleRowClick(item)}
+                          className={`hover:bg-slate-50 hover:shadow-sm transition-all duration-150 cursor-pointer ${
+                            selectedRowIndex === index ? 'bg-slate-200 border-2 border-slate-300' : ''
+                          }`}
+                          onClick={() => handleRowClick(item, index)}
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-semibold text-gray-900">
@@ -883,70 +879,70 @@ export default function UniversityDataPage() {
             )}
           </div>
 
-          {/* Pagination */}
-          {filteredAndSortedData.length > 0 && totalPages > 1 && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-              <div className="mt-8 flex items-center justify-between">
-                <div className="text-sm text-gray-600">
-                  Showing{" "}
-                  <span className="font-semibold text-slate-600">{startIndex + 1}</span> to{" "}
-                  <span className="font-semibold text-slate-600">
-                    {Math.min(endIndex, filteredAndSortedData.length)}
-                  </span>{" "}
-                  of{" "}
-                  <span className="font-semibold text-slate-600">
-                    {filteredAndSortedData.length}
-                  </span>{" "}
-                  results
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    Previous
-                  </button>
-
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${page === currentPage
-                            ? "bg-slate-500 text-white shadow-md"
-                            : "text-gray-700 bg-white border border-gray-300 hover:bg-slate-50"
-                          }`}
-                      >
-                        {page}
-                      </button>
-                    )
-                  )}
-
-                  <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            </div>
+          {/* Side Panel Section - 30% when open */}
+          {isSidePanelOpen && (
+            <SalaryDetailsPanel
+              isOpen={isSidePanelOpen}
+              onClose={handleCloseSidePanel}
+              data={selectedUniversityData}
+            />
           )}
         </div>
 
-        {/* Side Panel Section - 40% when open */}
-        {isSidePanelOpen && (
-          <SalaryDetailsPanel
-            isOpen={isSidePanelOpen}
-            onClose={handleCloseSidePanel}
-            data={selectedUniversityData}
-          />
+        {/* Pagination - Outside table/side panel container */}
+        {currentData.length > 0 && totalPages > 1 && (
+          <div className="max-w-7xl mx-auto pb-8 mt-8">
+            <div className="mt-8 flex items-center justify-between">
+              <div className="text-sm text-gray-600">
+                Showing{" "}
+                <span className="font-semibold text-slate-600">{startIndex + 1}</span> to{" "}
+                <span className="font-semibold text-slate-600">
+                  {Math.min(endIndex, filteredAndSortedData.length)}
+                </span>{" "}
+                of{" "}
+                <span className="font-semibold text-slate-600">
+                  {filteredAndSortedData.length}
+                </span>{" "}
+                results
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Previous
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${page === currentPage
+                          ? "bg-slate-500 text-white shadow-md"
+                          : "text-gray-700 bg-white border border-gray-300 hover:bg-slate-50"
+                        }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

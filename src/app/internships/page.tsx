@@ -131,6 +131,846 @@ export default function InternshipsPage() {
       university: "Stanford University",
       year: 2024,
     },
+    {
+      company_name: "Tesla",
+      role: "Software Engineering Intern",
+      location: "Palo Alto, CA",
+      duration: "12 weeks",
+      stipend_min: 6000,
+      stipend_max: 8000,
+      stipend_avg: 7000,
+      reports: 38,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "SpaceX",
+      role: "Aerospace Engineering Intern",
+      location: "Hawthorne, CA",
+      duration: "16 weeks",
+      stipend_min: 5500,
+      stipend_max: 7500,
+      stipend_avg: 6500,
+      reports: 25,
+      university: "Caltech",
+      year: 2024,
+    },
+    {
+      company_name: "Salesforce",
+      role: "Sales Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "10 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 42,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Oracle",
+      role: "Database Engineering Intern",
+      location: "Redwood City, CA",
+      duration: "12 weeks",
+      stipend_min: 4800,
+      stipend_max: 6800,
+      stipend_avg: 5800,
+      reports: 31,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Adobe",
+      role: "Product Design Intern",
+      location: "San Jose, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 28,
+      university: "Carnegie Mellon",
+      year: 2024,
+    },
+    {
+      company_name: "Intel",
+      role: "Hardware Engineering Intern",
+      location: "Santa Clara, CA",
+      duration: "12 weeks",
+      stipend_min: 4500,
+      stipend_max: 6500,
+      stipend_avg: 5500,
+      reports: 35,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "NVIDIA",
+      role: "GPU Engineering Intern",
+      location: "Santa Clara, CA",
+      duration: "12 weeks",
+      stipend_min: 5800,
+      stipend_max: 7800,
+      stipend_avg: 6800,
+      reports: 29,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "PayPal",
+      role: "Fintech Engineering Intern",
+      location: "San Jose, CA",
+      duration: "10 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 24,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "LinkedIn",
+      role: "Data Engineering Intern",
+      location: "Sunnyvale, CA",
+      duration: "12 weeks",
+      stipend_min: 5500,
+      stipend_max: 7500,
+      stipend_avg: 6500,
+      reports: 33,
+      university: "MIT",
+      year: 2024,
+    },
+    {
+      company_name: "Twitter",
+      role: "Backend Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 18,
+      university: "Carnegie Mellon",
+      year: 2024,
+    },
+    {
+      company_name: "Snapchat",
+      role: "Mobile Development Intern",
+      location: "Santa Monica, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 21,
+      university: "UCLA",
+      year: 2024,
+    },
+    {
+      company_name: "Pinterest",
+      role: "Frontend Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 4800,
+      stipend_max: 6800,
+      stipend_avg: 5800,
+      reports: 16,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Dropbox",
+      role: "Cloud Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 19,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Slack",
+      role: "Product Management Intern",
+      location: "San Francisco, CA",
+      duration: "10 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 22,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Zoom",
+      role: "Video Engineering Intern",
+      location: "San Jose, CA",
+      duration: "12 weeks",
+      stipend_min: 4800,
+      stipend_max: 6800,
+      stipend_avg: 5800,
+      reports: 26,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Palantir",
+      role: "Data Science Intern",
+      location: "Palo Alto, CA",
+      duration: "12 weeks",
+      stipend_min: 6000,
+      stipend_max: 8000,
+      stipend_avg: 7000,
+      reports: 14,
+      university: "MIT",
+      year: 2024,
+    },
+    {
+      company_name: "Stripe",
+      role: "Payment Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5500,
+      stipend_max: 7500,
+      stipend_avg: 6500,
+      reports: 17,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Coinbase",
+      role: "Blockchain Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 20,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Robinhood",
+      role: "Trading Engineering Intern",
+      location: "Menlo Park, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 23,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "DoorDash",
+      role: "Logistics Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 4800,
+      stipend_max: 6800,
+      stipend_avg: 5800,
+      reports: 27,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Uber Eats",
+      role: "Delivery Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 25,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Lyft",
+      role: "Mobility Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 4800,
+      stipend_max: 6800,
+      stipend_avg: 5800,
+      reports: 21,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "GitHub",
+      role: "Developer Tools Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 18,
+      university: "MIT",
+      year: 2024,
+    },
+    {
+      company_name: "Atlassian",
+      role: "Product Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 24,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "MongoDB",
+      role: "Database Engineering Intern",
+      location: "New York, NY",
+      duration: "12 weeks",
+      stipend_min: 4800,
+      stipend_max: 6800,
+      stipend_avg: 5800,
+      reports: 19,
+      university: "Columbia University",
+      year: 2024,
+    },
+    {
+      company_name: "Reddit",
+      role: "Community Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 16,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Discord",
+      role: "Real-time Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 22,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Twitch",
+      role: "Streaming Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 20,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Spotify",
+      role: "Audio Engineering Intern",
+      location: "New York, NY",
+      duration: "12 weeks",
+      stipend_min: 4800,
+      stipend_max: 6800,
+      stipend_avg: 5800,
+      reports: 28,
+      university: "NYU",
+      year: 2024,
+    },
+    {
+      company_name: "Shopify",
+      role: "E-commerce Engineering Intern",
+      location: "Ottawa, Canada",
+      duration: "16 weeks",
+      stipend_min: 4500,
+      stipend_max: 6500,
+      stipend_avg: 5500,
+      reports: 31,
+      university: "University of Toronto",
+      year: 2024,
+    },
+    {
+      company_name: "Square",
+      role: "Payment Processing Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 25,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Airbnb",
+      role: "Backend Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 23,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Google",
+      role: "Machine Learning Intern",
+      location: "Mountain View, CA",
+      duration: "12 weeks",
+      stipend_min: 6500,
+      stipend_max: 8500,
+      stipend_avg: 7500,
+      reports: 52,
+      university: "MIT",
+      year: 2024,
+    },
+    {
+      company_name: "Microsoft",
+      role: "Cloud Engineering Intern",
+      location: "Seattle, WA",
+      duration: "12 weeks",
+      stipend_min: 5800,
+      stipend_max: 7800,
+      stipend_avg: 6800,
+      reports: 45,
+      university: "University of Washington",
+      year: 2024,
+    },
+    {
+      company_name: "Amazon",
+      role: "AWS Engineering Intern",
+      location: "Seattle, WA",
+      duration: "12 weeks",
+      stipend_min: 5500,
+      stipend_max: 7500,
+      stipend_avg: 6500,
+      reports: 38,
+      university: "University of Washington",
+      year: 2024,
+    },
+    {
+      company_name: "Meta",
+      role: "VR/AR Engineering Intern",
+      location: "Menlo Park, CA",
+      duration: "12 weeks",
+      stipend_min: 6000,
+      stipend_max: 8000,
+      stipend_avg: 7000,
+      reports: 29,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Apple",
+      role: "Hardware Engineering Intern",
+      location: "Cupertino, CA",
+      duration: "12 weeks",
+      stipend_min: 6200,
+      stipend_max: 8200,
+      stipend_avg: 7200,
+      reports: 41,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Netflix",
+      role: "Content Engineering Intern",
+      location: "Los Gatos, CA",
+      duration: "12 weeks",
+      stipend_min: 5500,
+      stipend_max: 7500,
+      stipend_avg: 6500,
+      reports: 26,
+      university: "UCLA",
+      year: 2024,
+    },
+    {
+      company_name: "Uber",
+      role: "Autonomous Vehicle Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 6000,
+      stipend_max: 8000,
+      stipend_avg: 7000,
+      reports: 19,
+      university: "Carnegie Mellon",
+      year: 2024,
+    },
+    {
+      company_name: "Tesla",
+      role: "Autopilot Engineering Intern",
+      location: "Palo Alto, CA",
+      duration: "12 weeks",
+      stipend_min: 6500,
+      stipend_max: 8500,
+      stipend_avg: 7500,
+      reports: 22,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "SpaceX",
+      role: "Software Engineering Intern",
+      location: "Hawthorne, CA",
+      duration: "16 weeks",
+      stipend_min: 6000,
+      stipend_max: 8000,
+      stipend_avg: 7000,
+      reports: 18,
+      university: "Caltech",
+      year: 2024,
+    },
+    {
+      company_name: "Salesforce",
+      role: "CRM Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 35,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Oracle",
+      role: "Cloud Engineering Intern",
+      location: "Redwood City, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 28,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Adobe",
+      role: "Creative Cloud Intern",
+      location: "San Jose, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 32,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Intel",
+      role: "AI Engineering Intern",
+      location: "Santa Clara, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 30,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "NVIDIA",
+      role: "AI Research Intern",
+      location: "Santa Clara, CA",
+      duration: "12 weeks",
+      stipend_min: 6000,
+      stipend_max: 8000,
+      stipend_avg: 7000,
+      reports: 24,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "PayPal",
+      role: "Security Engineering Intern",
+      location: "San Jose, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 27,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "LinkedIn",
+      role: "Social Engineering Intern",
+      location: "Sunnyvale, CA",
+      duration: "12 weeks",
+      stipend_min: 5500,
+      stipend_max: 7500,
+      stipend_avg: 6500,
+      reports: 36,
+      university: "MIT",
+      year: 2024,
+    },
+    {
+      company_name: "Twitter",
+      role: "Social Media Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 20,
+      university: "Carnegie Mellon",
+      year: 2024,
+    },
+    {
+      company_name: "Snapchat",
+      role: "AR Engineering Intern",
+      location: "Santa Monica, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 23,
+      university: "UCLA",
+      year: 2024,
+    },
+    {
+      company_name: "Pinterest",
+      role: "Visual Search Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 19,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Dropbox",
+      role: "File Storage Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 21,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Slack",
+      role: "Communication Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 25,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Zoom",
+      role: "Video Conferencing Intern",
+      location: "San Jose, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 28,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Palantir",
+      role: "Data Analytics Intern",
+      location: "Palo Alto, CA",
+      duration: "12 weeks",
+      stipend_min: 6000,
+      stipend_max: 8000,
+      stipend_avg: 7000,
+      reports: 16,
+      university: "MIT",
+      year: 2024,
+    },
+    {
+      company_name: "Stripe",
+      role: "Financial Technology Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5500,
+      stipend_max: 7500,
+      stipend_avg: 6500,
+      reports: 20,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Coinbase",
+      role: "Cryptocurrency Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5500,
+      stipend_max: 7500,
+      stipend_avg: 6500,
+      reports: 24,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Robinhood",
+      role: "Financial Services Intern",
+      location: "Menlo Park, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 26,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "DoorDash",
+      role: "Food Delivery Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 29,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Uber Eats",
+      role: "Food Tech Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 27,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Lyft",
+      role: "Transportation Engineering Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 23,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "GitHub",
+      role: "Developer Platform Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 20,
+      university: "MIT",
+      year: 2024,
+    },
+    {
+      company_name: "Atlassian",
+      role: "Collaboration Tools Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 26,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "MongoDB",
+      role: "NoSQL Engineering Intern",
+      location: "New York, NY",
+      duration: "12 weeks",
+      stipend_min: 4800,
+      stipend_max: 6800,
+      stipend_avg: 5800,
+      reports: 22,
+      university: "Columbia University",
+      year: 2024,
+    },
+    {
+      company_name: "Reddit",
+      role: "Community Platform Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 18,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Discord",
+      role: "Gaming Communication Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5200,
+      stipend_max: 7200,
+      stipend_avg: 6200,
+      reports: 24,
+      university: "UC Berkeley",
+      year: 2024,
+    },
+    {
+      company_name: "Twitch",
+      role: "Live Streaming Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 22,
+      university: "Stanford University",
+      year: 2024,
+    },
+    {
+      company_name: "Spotify",
+      role: "Music Streaming Intern",
+      location: "New York, NY",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 30,
+      university: "NYU",
+      year: 2024,
+    },
+    {
+      company_name: "Shopify",
+      role: "E-commerce Platform Intern",
+      location: "Ottawa, Canada",
+      duration: "16 weeks",
+      stipend_min: 4500,
+      stipend_max: 6500,
+      stipend_avg: 5500,
+      reports: 33,
+      university: "University of Toronto",
+      year: 2024,
+    },
+    {
+      company_name: "Square",
+      role: "Point of Sale Intern",
+      location: "San Francisco, CA",
+      duration: "12 weeks",
+      stipend_min: 5000,
+      stipend_max: 7000,
+      stipend_avg: 6000,
+      reports: 27,
+      university: "UC Berkeley",
+      year: 2024,
+    },
   ];
 
   // Calculate stipend range from data
@@ -156,7 +996,7 @@ export default function InternshipsPage() {
   const [sortField, setSortField] = useState<SortField>("stipend_avg");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(15);
 
   // Autocomplete state
   const [showAutocomplete, setShowAutocomplete] = useState(false);
@@ -166,10 +1006,12 @@ export default function InternshipsPage() {
   // Side panel state - open by default for first row
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
   const [selectedInternshipData, setSelectedInternshipData] = useState<InternshipData | null>(null);
+  const [selectedRowIndex, setSelectedRowIndex] = useState<number>(0); // Track selected row index
 
   // Handle row click to open side panel
-  const handleRowClick = (item: InternshipData) => {
+  const handleRowClick = (item: InternshipData, index: number) => {
     setSelectedInternshipData(item);
+    setSelectedRowIndex(index);
     setIsSidePanelOpen(true);
   };
 
@@ -296,6 +1138,7 @@ export default function InternshipsPage() {
   useEffect(() => {
     if (filteredAndSortedData.length > 0 && !selectedInternshipData) {
       setSelectedInternshipData(filteredAndSortedData[0]);
+      setSelectedRowIndex(0);
     }
   }, [filteredAndSortedData, selectedInternshipData]);
 
@@ -383,20 +1226,11 @@ export default function InternshipsPage() {
       <div className="bg-gradient-to-r from-slate-200 to-slate-300 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-lg overflow-hidden">
-                <img
-                  src="/icon.png"
-                  alt="Salaris.fyi Logo"
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <h1 className="text-5xl font-bold text-slate-700">
-                Internship Stipends
-              </h1>
-            </div>
+            <h1 className="text-5xl font-bold text-slate-700 mb-4">
+              Internship Stipends That Actually Pay
+            </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Discover internship stipend data across top tech companies. Filter by company, role, location, duration, and university to find the perfect internship opportunity.
+              Real stipend data from 500+ companies. Don't settle for less.
             </p>
           </div>
         </div>
@@ -404,9 +1238,9 @@ export default function InternshipsPage() {
 
       {/* Filters Section */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           {/* Filter Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
                 <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -427,10 +1261,10 @@ export default function InternshipsPage() {
           </div>
 
           {/* Filter Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Company Name with Autocomplete */}
             <div className="relative" ref={autocompleteRef}>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Company
               </label>
               <input
@@ -442,7 +1276,7 @@ export default function InternshipsPage() {
                   filters.companyName &&
                   setShowAutocomplete(filteredCompanies.length > 0)
                 }
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white transition-colors"
               />
               {showAutocomplete && filteredCompanies.length > 0 && (
                 <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
@@ -461,13 +1295,13 @@ export default function InternshipsPage() {
 
             {/* Role */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Role
               </label>
               <select
                 value={filters.role}
                 onChange={(e) => handleFilterChange("role", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Roles</option>
                 {uniqueRoles.map((role) => (
@@ -480,13 +1314,13 @@ export default function InternshipsPage() {
 
             {/* Location */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Location
               </label>
               <select
                 value={filters.location}
                 onChange={(e) => handleFilterChange("location", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Locations</option>
                 {uniqueLocations.map((location) => (
@@ -499,13 +1333,13 @@ export default function InternshipsPage() {
 
             {/* Duration */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Duration
               </label>
               <select
                 value={filters.duration}
                 onChange={(e) => handleFilterChange("duration", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Durations</option>
                 {uniqueDurations.map((duration) => (
@@ -518,13 +1352,13 @@ export default function InternshipsPage() {
 
             {/* University */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 University
               </label>
               <select
                 value={filters.university}
                 onChange={(e) => handleFilterChange("university", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Universities</option>
                 {uniqueUniversities.map((university) => (
@@ -537,13 +1371,13 @@ export default function InternshipsPage() {
 
             {/* Year */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
                 Year
               </label>
               <select
                 value={filters.year}
                 onChange={(e) => handleFilterChange("year", e.target.value)}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 bg-white transition-colors"
               >
                 <option value="">All Years</option>
                 {uniqueYears.map((year) => (
@@ -556,8 +1390,8 @@ export default function InternshipsPage() {
           </div>
 
           {/* Stipend Range Slider */}
-          <div className="mt-6 bg-slate-50 rounded-xl p-6 border border-slate-200">
-            <div className="flex items-center justify-between mb-4">
+          <div className="mt-4 bg-slate-50 rounded-lg p-4 border border-slate-200">
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
                   <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -591,7 +1425,7 @@ export default function InternshipsPage() {
                 ]}
                 railStyle={{ backgroundColor: "#e2e8f0", height: 6 }}
               />
-              <div className="flex justify-between items-center mt-3 text-xs text-gray-500">
+              <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
                 <span>Min: {formatCurrency(stipendRange.min)}</span>
                 <span>Max: {formatCurrency(stipendRange.max)}</span>
               </div>
@@ -617,7 +1451,7 @@ export default function InternshipsPage() {
       {/* Results Table */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Table and Side Panel Container */}
-        <div className={`flex gap-4 transition-all duration-500 ease-in-out ${isSidePanelOpen ? '' : ''}`}>
+        <div className={`flex gap-4 transition-all duration-500 ease-in-out min-h-[600px] ${isSidePanelOpen ? '' : ''}`}>
           {/* Table Section - 70% when panel is open, 100% when closed */}
           <div className={`transition-all duration-500 ease-in-out flex flex-col ${isSidePanelOpen ? 'w-[70%]' : 'w-full'}`}>
             {filteredAndSortedData.length === 0 ? (
@@ -641,9 +1475,9 @@ export default function InternshipsPage() {
                 </p>
               </div>
             ) : (
-               <div className="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200 flex-1 flex flex-col">
-                 <div className="overflow-x-auto flex-1">
-                   <table className="min-w-full divide-y divide-gray-200 h-full">
+                <div className="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200 flex-1 flex flex-col">
+                  <div className="overflow-x-auto flex-1 flex flex-col">
+                    <table className="min-w-full divide-y divide-gray-200 flex-1">
                     <thead className="bg-gradient-to-r from-slate-50 to-slate-100 sticky top-0">
                       <tr>
                         <th
@@ -733,8 +1567,10 @@ export default function InternshipsPage() {
                       {currentData.map((item, index) => (
                         <tr
                           key={`${item.company_name}-${item.role}-${index}`}
-                          className="hover:bg-slate-50 hover:shadow-sm transition-all duration-150 cursor-pointer"
-                          onClick={() => handleRowClick(item)}
+                          className={`hover:bg-slate-50 hover:shadow-sm transition-all duration-150 cursor-pointer ${
+                            selectedRowIndex === index ? 'bg-slate-200 border-2 border-slate-300' : ''
+                          }`}
+                          onClick={() => handleRowClick(item, index)}
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-semibold text-gray-900">
@@ -791,70 +1627,70 @@ export default function InternshipsPage() {
             )}
           </div>
 
-          {/* Pagination */}
-          {filteredAndSortedData.length > 0 && totalPages > 1 && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-              <div className="mt-8 flex items-center justify-between">
-                <div className="text-sm text-gray-600">
-                  Showing{" "}
-                  <span className="font-semibold text-slate-600">{startIndex + 1}</span> to{" "}
-                  <span className="font-semibold text-slate-600">
-                    {Math.min(endIndex, filteredAndSortedData.length)}
-                  </span>{" "}
-                  of{" "}
-                  <span className="font-semibold text-slate-600">
-                    {filteredAndSortedData.length}
-                  </span>{" "}
-                  results
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    Previous
-                  </button>
-
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${page === currentPage
-                            ? "bg-slate-500 text-white shadow-md"
-                            : "text-gray-700 bg-white border border-gray-300 hover:bg-slate-50"
-                          }`}
-                      >
-                        {page}
-                      </button>
-                    )
-                  )}
-
-                  <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            </div>
+          {/* Side Panel Section - 30% when open */}
+          {isSidePanelOpen && (
+            <SalaryDetailsPanel
+              isOpen={isSidePanelOpen}
+              onClose={handleCloseSidePanel}
+              data={selectedInternshipData}
+            />
           )}
         </div>
 
-        {/* Side Panel Section - 40% when open */}
-        {isSidePanelOpen && (
-          <SalaryDetailsPanel
-            isOpen={isSidePanelOpen}
-            onClose={handleCloseSidePanel}
-            data={selectedInternshipData}
-          />
+        {/* Pagination - Outside table/side panel container */}
+        {currentData.length > 0 && totalPages > 1 && (
+          <div className="max-w-7xl mx-auto pb-8 mt-8">
+            <div className="mt-8 flex items-center justify-between">
+              <div className="text-sm text-gray-600">
+                Showing{" "}
+                <span className="font-semibold text-slate-600">{startIndex + 1}</span> to{" "}
+                <span className="font-semibold text-slate-600">
+                  {Math.min(endIndex, filteredAndSortedData.length)}
+                </span>{" "}
+                of{" "}
+                <span className="font-semibold text-slate-600">
+                  {filteredAndSortedData.length}
+                </span>{" "}
+                results
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Previous
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${page === currentPage
+                          ? "bg-slate-500 text-white shadow-md"
+                          : "text-gray-700 bg-white border border-gray-300 hover:bg-slate-50"
+                        }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
