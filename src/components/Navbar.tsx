@@ -4,11 +4,14 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage, languages } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navbar() {
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const { theme, resolvedTheme, toggleTheme } = useTheme();
   const { currentLanguage, setLanguage, t } = useLanguage();
+  const { user, signOut, openAuthModal } = useAuth();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -16,6 +19,9 @@ export default function Navbar() {
       const target = event.target as HTMLElement;
       if (!target.closest('.language-dropdown')) {
         setIsLanguageDropdownOpen(false);
+      }
+      if (!target.closest('.user-dropdown')) {
+        setIsUserDropdownOpen(false);
       }
     };
 
@@ -154,13 +160,76 @@ export default function Navbar() {
               )}
             </button>
 
-            {/* Auth Button */}
-            <Link
-              href="/auth"
-              className="bg-slate-400/20 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-400/30 transition-colors font-medium border border-slate-400/30 hover:border-slate-400/50"
-            >
-              {t("nav.signin")}
-            </Link>
+            {/* Auth Button / User Profile */}
+            {user ? (
+              <div className="relative user-dropdown">
+                <button
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors font-medium px-3 py-2 rounded-lg hover:bg-slate-200/50"
+                >
+                  <img
+                    src={user.photoURL || "/default-avatar.png"}
+                    alt={user.displayName || "User"}
+                    className="w-8 h-8 rounded-full border-2 border-slate-300"
+                  />
+                  <span className="max-w-32 truncate">{user.displayName}</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${
+                      isUserDropdownOpen ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                {isUserDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 border border-gray-200 dark:border-gray-700 animate-slide-up">
+                    <div className="py-1">
+                      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          {user.displayName}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                          {user.email}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          signOut();
+                          setIsUserDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-3 text-sm text-red-600 dark:text-red-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors flex items-center space-x-2"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                          />
+                        </svg>
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button
+                onClick={openAuthModal}
+                className="bg-slate-400/20 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-400/30 transition-colors font-medium border border-slate-400/30 hover:border-slate-400/50"
+              >
+                {t("nav.signin")}
+              </button>
+            )}
           </div>
 
           {/* Mobile menu button */}
