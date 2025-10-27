@@ -15,19 +15,19 @@ interface ReplyItemProps {
 
 export default function ReplyItem({ reply, onVote, onDelete }: ReplyItemProps) {
   const { user } = useAuth();
-  const isOwner = user?.uid === reply.userId && !reply.isAnonymous;
-  const userVote = user ? reply.votedBy?.[user.uid] || null : null;
+  const isOwner = user?.id === reply.user_id && !reply.is_anonymous;
+  const userVote = user ? reply.voted_by?.[user.id] || null : null;
 
-  const timeAgo = reply.createdAt
-    ? formatDistanceToNow(reply.createdAt.toDate(), { addSuffix: true })
+  const timeAgo = reply.created_at
+    ? formatDistanceToNow(new Date(reply.created_at), { addSuffix: true })
     : "just now";
 
   return (
     <div className="flex gap-3 py-3">
       {/* User Avatar */}
       <img
-        src={reply.userPhotoURL || "/default-avatar.png"}
-        alt={reply.userDisplayName}
+        src={reply.user_photo_url || "/default-avatar.png"}
+        alt={reply.user_display_name}
         className="w-8 h-8 rounded-full border border-slate-200 flex-shrink-0"
       />
 
@@ -35,9 +35,9 @@ export default function ReplyItem({ reply, onVote, onDelete }: ReplyItemProps) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <span className="font-medium text-sm text-slate-700">
-            {reply.userDisplayName}
+            {reply.user_display_name}
           </span>
-          {reply.isAnonymous && (
+          {reply.is_anonymous && (
             <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-full">
               Anonymous
             </span>

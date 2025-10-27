@@ -1,48 +1,46 @@
-import { Timestamp } from "firebase/firestore";
-
 export interface Attachment {
   type: "image" | "file";
   name: string;
   url: string;
   size: number;
-  mimeType: string;
+  mimeType?: string;
 }
 
 export interface Comment {
   id: string;
-  salaryId: string; // Reference to the salary entry
-  userId: string | null; // Null for anonymous users
-  userDisplayName: string;
-  userPhotoURL: string | null;
-  isAnonymous: boolean;
+  salary_id: string; // Reference to the salary entry
+  user_id: string | null; // Null for anonymous users
+  user_display_name: string;
+  user_photo_url: string | null;
+  is_anonymous: boolean;
   content: string;
   attachments?: Attachment[];
   mentions?: string[]; // User IDs of mentioned users
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  created_at: string; // ISO timestamp from Supabase
+  updated_at: string; // ISO timestamp from Supabase
   upvotes: number;
   downvotes: number;
-  replyCount: number;
-  votedBy: {
+  reply_count: number;
+  voted_by: {
     [userId: string]: "up" | "down";
   };
 }
 
 export interface Reply {
   id: string;
-  commentId: string;
-  userId: string | null; // Null for anonymous users
-  userDisplayName: string;
-  userPhotoURL: string | null;
-  isAnonymous: boolean;
+  comment_id: string;
+  user_id: string | null; // Null for anonymous users
+  user_display_name: string;
+  user_photo_url: string | null;
+  is_anonymous: boolean;
   content: string;
   attachments?: Attachment[];
   mentions?: string[];
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  created_at: string; // ISO timestamp from Supabase
+  updated_at: string; // ISO timestamp from Supabase
   upvotes: number;
   downvotes: number;
-  votedBy: {
+  voted_by: {
     [userId: string]: "up" | "down";
   };
 }

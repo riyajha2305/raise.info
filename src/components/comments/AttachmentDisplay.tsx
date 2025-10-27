@@ -3,7 +3,7 @@
 import React from "react";
 import { FileText, Download } from "lucide-react";
 import { Attachment } from "@/types/comments";
-import { formatFileSize } from "@/lib/firebase/storage";
+import { formatFileSize } from "@/lib/supabase/storage";
 
 interface AttachmentDisplayProps {
   attachments: Attachment[];

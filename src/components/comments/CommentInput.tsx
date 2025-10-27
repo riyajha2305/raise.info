@@ -3,7 +3,7 @@
 import React, { useState, useRef } from "react";
 import { Paperclip, Image as ImageIcon, AtSign, X, FileText } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { uploadImage, uploadFile, formatFileSize } from "@/lib/firebase/storage";
+import { uploadImage, uploadFile, formatFileSize } from "@/lib/supabase/storage";
 import { Attachment } from "@/types/comments";
 
 interface CommentInputProps {
@@ -41,8 +41,8 @@ export default function CommentInput({
       setUploadProgress(0);
 
       const attachment = type === "image"
-        ? await uploadImage(file, user.uid, setUploadProgress)
-        : await uploadFile(file, user.uid, setUploadProgress);
+        ? await uploadImage(file, user.id, setUploadProgress)
+        : await uploadFile(file, user.id, setUploadProgress);
 
       setAttachments((prev) => [...prev, attachment]);
     } catch (error: any) {

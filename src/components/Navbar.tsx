@@ -168,11 +168,11 @@ export default function Navbar() {
                   className="flex items-center space-x-2 text-slate-600 hover:text-slate-800 transition-colors font-medium px-3 py-2 rounded-lg hover:bg-slate-200/50"
                 >
                   <img
-                    src={user.photoURL || "/default-avatar.png"}
-                    alt={user.displayName || "User"}
+                    src={user.user_metadata?.avatar_url || user.user_metadata?.picture || "/default-avatar.png"}
+                    alt={user.user_metadata?.full_name || user.user_metadata?.name || "User"}
                     className="w-8 h-8 rounded-full border-2 border-slate-300"
                   />
-                  <span className="max-w-32 truncate">{user.displayName}</span>
+                  <span className="max-w-32 truncate">{user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0]}</span>
                   <svg
                     className={`w-4 h-4 transition-transform ${
                       isUserDropdownOpen ? "rotate-180" : ""
@@ -195,7 +195,7 @@ export default function Navbar() {
                     <div className="py-1">
                       <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                         <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {user.displayName}
+                          {user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0]}
                         </p>
                         <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                           {user.email}

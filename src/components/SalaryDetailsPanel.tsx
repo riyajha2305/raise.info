@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { X } from "lucide-react";
 import { CommentSection } from "./comments";
 
 interface SalaryData {
+  id?: string;
   company_name?: string;
   company?: string;
   designation?: string;
@@ -22,23 +23,52 @@ interface SalaryData {
   employment_type?: string;
   duration?: string;
   year?: number;
+  base_salary?: number;
+  bonus?: number;
+  stock_compensation?: number;
+  total_compensation?: number;
+  upvotes?: number;
+  downvotes?: number;
 }
 
 interface SalaryDetailsPanelProps {
   isOpen: boolean;
   onClose: () => void;
   data: SalaryData | null;
+  onRefresh?: () => void;
 }
 
-export default function SalaryDetailsPanel({ isOpen, onClose, data }: SalaryDetailsPanelProps) {
-  // Generate a unique salary ID based on the data
+export default function SalaryDetailsPanel({
+  isOpen,
+  onClose,
+  data,
+  onRefresh,
+}: SalaryDetailsPanelProps) {
+  // Generate a unique salary ID for comments/votes
   const salaryId = useMemo(() => {
     if (!data) return "";
+    // Always use database ID for voting (must be UUID)
+    if (data.id) {
+      return data.id;
+    }
+    // Fallback: generate from data for comments
     const company = data.company_name || data.company || "unknown";
     const role = data.designation || data.role || "unknown";
     const location = data.location || "unknown";
     return `${company}-${role}-${location}`.toLowerCase().replace(/\s+/g, "-");
   }, [data]);
+
+  // Debug logging
+  useEffect(() => {
+    if (salaryId && data) {
+      console.log(
+        "SalaryDetailsPanel - salaryId:",
+        salaryId,
+        "data.id:",
+        data.id
+      );
+    }
+  }, [salaryId, data]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-IN", {
@@ -59,35 +89,77 @@ export default function SalaryDetailsPanel({ isOpen, onClose, data }: SalaryDeta
 
   const calculateCTCBreakup = () => {
     if (!data) return null;
-    
-    const baseSalary = data.avg_salary || data.stipend_avg || 0;
+
     const isInternship = !!data.stipend_avg;
-    
+
     if (isInternship) {
+      const stipend = data.stipend_avg || 0;
       return {
-        base: baseSalary,
-        total: baseSalary,
+        total: stipend,
         components: [
-          { name: "Monthly Stipend", amount: baseSalary, percentage: 100 },
-        ]
+          { name: "Monthly Stipend", amount: stipend, percentage: 100 },
+        ],
       };
     }
 
-    // For full-time roles, calculate typical CTC breakup
-    const base = Math.round(baseSalary * 0.7); // 70% base salary
-    const hra = Math.round(baseSalary * 0.2); // 20% HRA
-    const allowances = Math.round(baseSalary * 0.1); // 10% other allowances
-    
+    // Use real data from database if available
+    const total = data.total_compensation || data.avg_salary || 0;
+    const base = data.base_salary || 0;
+    const bonus = data.bonus || 0;
+    const stock = data.stock_compensation || 0;
+
+    // If we have the actual breakdown from database, use it
+    if (base > 0) {
+      const components = [];
+
+      if (base > 0) {
+        const basePercent = total > 0 ? Math.round((base / total) * 100) : 0;
+        components.push({
+          name: "Base Salary",
+          amount: base,
+          percentage: basePercent,
+        });
+      }
+
+      if (bonus > 0) {
+        const bonusPercent = total > 0 ? Math.round((bonus / total) * 100) : 0;
+        components.push({
+          name: "Bonus",
+          amount: bonus,
+          percentage: bonusPercent,
+        });
+      }
+
+      if (stock > 0) {
+        const stockPercent = total > 0 ? Math.round((stock / total) * 100) : 0;
+        components.push({
+          name: "Stock",
+          amount: stock,
+          percentage: stockPercent,
+        });
+      }
+
+      if (components.length > 0) {
+        return { total, components };
+      }
+    }
+
+    // Fallback: calculate estimated breakdown if no detailed data
+    const estimatedBase = Math.round(total * 0.7);
+    const estimatedHra = Math.round(total * 0.2);
+    const estimatedAllowances = total - estimatedBase - estimatedHra;
+
     return {
-      base,
-      hra,
-      allowances,
-      total: baseSalary,
+      total,
       components: [
-        { name: "Base Salary", amount: base, percentage: 70 },
-        { name: "HRA", amount: hra, percentage: 20 },
-        { name: "Other Allowances", amount: allowances, percentage: 10 },
-      ]
+        { name: "Base Salary", amount: estimatedBase, percentage: 70 },
+        { name: "HRA", amount: estimatedHra, percentage: 20 },
+        {
+          name: "Other Allowances",
+          amount: estimatedAllowances,
+          percentage: 10,
+        },
+      ],
     };
   };
 
@@ -121,12 +193,19 @@ export default function SalaryDetailsPanel({ isOpen, onClose, data }: SalaryDeta
           {/* CTC Breakup Section */}
           <div className="px-6 py-3">
             <div className="bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg p-3 border border-gray-200">
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">CTC Breakup</h3>
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                CTC Breakup
+              </h3>
               {ctcBreakup && (
                 <div className="w-full space-y-2">
                   {ctcBreakup.components.map((component, index) => (
-                    <div key={index} className="flex items-center justify-between px-3 py-2 bg-white rounded-md border border-gray-200 shadow-sm h-12">
-                      <span className="text-xs text-gray-700 font-medium">{component.name}</span>
+                    <div
+                      key={index}
+                      className="flex items-center justify-between px-3 py-2 bg-white rounded-md border border-gray-200 shadow-sm h-12"
+                    >
+                      <span className="text-xs text-gray-700 font-medium">
+                        {component.name}
+                      </span>
                       <div className="text-right">
                         <div className="text-xs font-semibold text-gray-900">
                           {formatCurrencyCompact(component.amount)}
@@ -138,7 +217,9 @@ export default function SalaryDetailsPanel({ isOpen, onClose, data }: SalaryDeta
                     </div>
                   ))}
                   <div className="flex items-center justify-between px-3 py-2 bg-slate-200 rounded-md border-2 border-slate-300 h-12">
-                    <span className="text-xs font-bold text-gray-900">Total CTC</span>
+                    <span className="text-xs font-bold text-gray-900">
+                      Total CTC
+                    </span>
                     <span className="text-xs font-bold text-gray-900">
                       {formatCurrencyCompact(ctcBreakup.total)}
                     </span>
@@ -152,8 +233,9 @@ export default function SalaryDetailsPanel({ isOpen, onClose, data }: SalaryDeta
           <div className="px-6 pb-4">
             <CommentSection
               salaryId={salaryId}
-              upvoteCount={91}
-              downvoteCount={6}
+              upvoteCount={data.upvotes || 0}
+              downvoteCount={data.downvotes || 0}
+              onVoteChange={onRefresh}
             />
           </div>
         </div>

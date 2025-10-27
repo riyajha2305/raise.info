@@ -1,25 +1,27 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
-import Link from "next/link";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import salariesData from "@/data/salaries.json";
+import { supabase } from "@/lib/supabase/config";
 import { useLanguage } from "@/contexts/LanguageContext";
 import SalaryDetailsPanel from "@/components/SalaryDetailsPanel";
 
 interface SalaryData {
+  id?: string;
   company_name: string;
   designation: string;
   location: string;
   yoe: number;
-  min_salary: number;
-  max_salary: number;
   avg_salary: number;
   reports: number;
+  base_salary?: number;
+  bonus?: number;
+  stock_compensation?: number;
+  total_compensation?: number;
+  upvotes?: number;
+  downvotes?: number;
 }
-
-const salaries: SalaryData[] = salariesData as SalaryData[];
 
 interface Filters {
   companyName: string;
@@ -35,15 +37,77 @@ type SortDirection = "asc" | "desc";
 
 export default function PayScope() {
   const { t } = useLanguage();
-  
+  const [salaries, setSalaries] = useState<SalaryData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch salary data from Supabase
+  useEffect(() => {
+    const fetchSalaries = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("salaries")
+          .select(
+            "id, company_name, designation, location, years_of_experience, avg_salary, data_points_count, base_salary, bonus, stock_compensation, total_compensation, upvotes, downvotes"
+          )
+          .order("avg_salary", { ascending: false });
+
+        if (error) throw error;
+
+        // Transform the data to match our interface
+        const transformedData: SalaryData[] = (data || []).map(
+          (item: {
+            id: string;
+            company_name: string;
+            designation: string;
+            location: string;
+            years_of_experience: number | null;
+            avg_salary: number;
+            data_points_count: number;
+            base_salary?: number;
+            bonus?: number;
+            stock_compensation?: number;
+            total_compensation?: number;
+            upvotes?: number;
+            downvotes?: number;
+          }) => ({
+            id: item.id,
+            company_name: item.company_name,
+            designation: item.designation,
+            location: item.location,
+            yoe: item.years_of_experience || 0,
+            avg_salary: item.avg_salary || 0,
+            reports: item.data_points_count || 0,
+            base_salary: item.base_salary,
+            bonus: item.bonus,
+            stock_compensation: item.stock_compensation,
+            total_compensation: item.total_compensation,
+            upvotes: item.upvotes || 0,
+            downvotes: item.downvotes || 0,
+          })
+        );
+
+        setSalaries(transformedData);
+      } catch (error) {
+        console.error("Error fetching salaries:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSalaries();
+  }, []);
+
   // Calculate salary range from data
   const salaryRange = useMemo(() => {
+    if (salaries.length === 0) {
+      return { min: 0, max: 100000000 };
+    }
     const allSalaries = salaries.map((item) => item.avg_salary);
     return {
       min: Math.floor(Math.min(...allSalaries)),
       max: Math.ceil(Math.max(...allSalaries)),
     };
-  }, []);
+  }, [salaries]);
 
   const [filters, setFilters] = useState<Filters>({
     companyName: "",
@@ -76,8 +140,10 @@ export default function PayScope() {
 
   // Side panel state - open by default for first row
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
-  const [selectedSalaryData, setSelectedSalaryData] = useState<SalaryData | null>(null);
+  const [selectedSalaryData, setSelectedSalaryData] =
+    useState<SalaryData | null>(null);
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(0); // Track selected row index
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   // Handle row click to open side panel
   const handleRowClick = (item: SalaryData, index: number) => {
@@ -92,21 +158,77 @@ export default function PayScope() {
     setSelectedSalaryData(null);
   };
 
+  // Function to refresh salary data
+  const refreshSalaryData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("salaries")
+        .select(
+          "id, company_name, designation, location, years_of_experience, avg_salary, data_points_count, base_salary, bonus, stock_compensation, total_compensation, upvotes, downvotes"
+        )
+        .order("avg_salary", { ascending: false });
+
+      if (error) throw error;
+
+      const transformedData: SalaryData[] = (data || []).map(
+        (item: {
+          id: string;
+          company_name: string;
+          designation: string;
+          location: string;
+          years_of_experience: number | null;
+          avg_salary: number;
+          data_points_count: number;
+          base_salary?: number;
+          bonus?: number;
+          stock_compensation?: number;
+          total_compensation?: number;
+          upvotes?: number;
+          downvotes?: number;
+        }) => ({
+          id: item.id,
+          company_name: item.company_name,
+          designation: item.designation,
+          location: item.location,
+          yoe: item.years_of_experience || 0,
+          avg_salary: item.avg_salary || 0,
+          reports: item.data_points_count || 0,
+          base_salary: item.base_salary,
+          bonus: item.bonus,
+          stock_compensation: item.stock_compensation,
+          total_compensation: item.total_compensation,
+          upvotes: item.upvotes || 0,
+          downvotes: item.downvotes || 0,
+        })
+      );
+
+      setSalaries(transformedData);
+    } catch (error) {
+      console.error("Error refreshing salaries:", error);
+    }
+  };
+
+  // Listen for vote changes from the panel
+  useEffect(() => {
+    if (refreshTrigger > 0) {
+      refreshSalaryData();
+    }
+  }, [refreshTrigger]);
 
   // Get unique values for dropdowns
   const uniqueCompanies = useMemo(
     () => Array.from(new Set(salaries.map((item) => item.company_name))).sort(),
-    []
+    [salaries]
   );
 
   const uniqueLocations = useMemo(
     () => Array.from(new Set(salaries.map((item) => item.location))).sort(),
-    []
+    [salaries]
   );
 
   const uniqueDesignations = useMemo(
     () => Array.from(new Set(salaries.map((item) => item.designation))).sort(),
-    []
+    [salaries]
   );
 
   // Handle company name autocomplete
@@ -141,7 +263,7 @@ export default function PayScope() {
 
   // Filter and sort data
   const filteredAndSortedData = useMemo(() => {
-    let filtered = salaries.filter((item) => {
+    const filtered = salaries.filter((item) => {
       const matchesCompany = item.company_name
         .toLowerCase()
         .includes(filters.companyName.toLowerCase());
@@ -182,7 +304,7 @@ export default function PayScope() {
     });
 
     return filtered;
-  }, [filters, sortField, sortDirection]);
+  }, [salaries, filters, sortField, sortDirection]);
 
   // Set first row as selected by default when component mounts
   useEffect(() => {
@@ -290,14 +412,18 @@ export default function PayScope() {
 
   // Format currency
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-IN", {
-      style: "currency",
-      currency: "INR",
-      maximumFractionDigits: 0,
-    }).format(amount);
+    // Format salary in lakhs for display
+    if (amount >= 10000000) {
+      return `₹${(amount / 10000000).toFixed(1)}Cr`;
+    } else if (amount >= 100000) {
+      return `₹${(amount / 100000).toFixed(1)}L`;
+    } else if (amount >= 1000) {
+      return `₹${(amount / 1000).toFixed(0)}K`;
+    }
+    return `₹${amount.toFixed(0)}`;
   };
 
-  // Format currency compact
+  // Format currency compact (used for filters and ranges)
   const formatCurrencyCompact = (amount: number) => {
     if (amount >= 10000000) {
       return `₹${(amount / 10000000).toFixed(1)}Cr`;
@@ -352,7 +478,8 @@ export default function PayScope() {
               Are You Getting Paid What You Deserve?
             </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Real salary data from 1000+ companies. Stop guessing, start negotiating.
+              Real salary data from 1000+ companies. Stop guessing, start
+              negotiating.
             </p>
           </div>
         </div>
@@ -365,18 +492,40 @@ export default function PayScope() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
-                <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                <svg
+                  className="w-4 h-4 text-slate-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Filter Results</h3>
+              <h3 className="text-lg font-semibold text-gray-900">
+                Filter Results
+              </h3>
             </div>
             <button
               onClick={resetFilters}
               className="flex items-center gap-2 px-4 py-2 text-sm bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors font-medium shadow-sm hover:shadow-md"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
               </svg>
               Reset Filters
             </button>
@@ -487,23 +636,38 @@ export default function PayScope() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                  <svg
+                    className="w-4 h-4 text-slate-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                    />
                   </svg>
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-900">Salary Range</h4>
-                  <p className="text-xs text-gray-600">Filter by average salary</p>
+                  <h4 className="text-sm font-semibold text-gray-900">
+                    Salary Range
+                  </h4>
+                  <p className="text-xs text-gray-600">
+                    Filter by average salary
+                  </p>
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-lg font-bold text-slate-700">
-                  {formatCurrencyCompact(filters.salaryMin)} - {formatCurrencyCompact(filters.salaryMax)}
+                  {formatCurrencyCompact(filters.salaryMin)} -{" "}
+                  {formatCurrencyCompact(filters.salaryMax)}
                 </div>
                 <div className="text-xs text-gray-500">Current range</div>
               </div>
             </div>
-            
+
             <div className="px-2">
               <Slider
                 range
@@ -551,168 +715,158 @@ export default function PayScope() {
       {/* Results Table */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Table and Side Panel Container */}
-        <div className={`flex gap-4 transition-all duration-500 ease-in-out min-h-[600px] ${isSidePanelOpen ? '' : ''}`}>
+        <div
+          className={`flex gap-4 transition-all duration-500 ease-in-out min-h-[600px] ${
+            isSidePanelOpen ? "" : ""
+          }`}
+        >
           {/* Table Section - 70% when panel is open, 100% when closed */}
-          <div className={`transition-all duration-500 ease-in-out flex flex-col ${isSidePanelOpen ? 'w-[70%]' : 'w-full'}`}>
-        {currentData.length === 0 ? (
-          <div className="text-center py-16 bg-white dark:bg-white rounded-xl shadow-sm border border-gray-200">
-            <svg
-              className="mx-auto h-16 w-16 text-neutral-400 dark:text-neutral-500"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <div className="text-gray-600 text-xl font-semibold mt-6">No results found</div>
-            <p className="text-neutral-500 dark:text-neutral-500 mt-2">
-              Try adjusting your filters to see more results
-            </p>
-          </div>
-        ) : (
-          <>
-            {/* Table */}
-            <div className="bg-white dark:bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200 flex-1 flex flex-col">
-              <div className="overflow-x-auto flex-1 flex flex-col">
-                <table className="min-w-full divide-y divide-gray-200 table-fixed flex-1">
-                  <thead className="bg-gradient-to-r from-slate-50 to-slate-100 sticky top-0">
-                    <tr>
-                      <th
-                        className="group px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-slate-200 transition-colors select-none w-48"
-                        onClick={() => handleSort("company_name")}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span className="flex-1">Company</span>
-                          <SortIcon field="company_name" />
-                        </div>
-                      </th>
-                      <th
-                        className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-40"
-                        onClick={() => handleSort("designation")}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span className="flex-1">Designation</span>
-                          <SortIcon field="designation" />
-                        </div>
-                      </th>
-                      <th
-                        className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                        onClick={() => handleSort("location")}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span className="flex-1">Location</span>
-                          <SortIcon field="location" />
-                        </div>
-                      </th>
-                      <th
-                        className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-20"
-                        onClick={() => handleSort("yoe")}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span className="flex-1">YOE</span>
-                          <SortIcon field="yoe" />
-                        </div>
-                      </th>
-                      <th
-                        className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                        onClick={() => handleSort("min_salary")}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span className="flex-1">Min Salary</span>
-                          <SortIcon field="min_salary" />
-                        </div>
-                      </th>
-                      <th
-                        className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                        onClick={() => handleSort("max_salary")}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span className="flex-1">Max Salary</span>
-                          <SortIcon field="max_salary" />
-                        </div>
-                      </th>
-                      <th
-                        className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                        onClick={() => handleSort("avg_salary")}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span className="flex-1">Avg Salary</span>
-                          <SortIcon field="avg_salary" />
-                        </div>
-                      </th>
-                      <th
-                        className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-24"
-                        onClick={() => handleSort("reports")}
-                      >
-                        <div className="flex items-center justify-between w-full">
-                          <span className="flex-1">Reports</span>
-                          <SortIcon field="reports" />
-                        </div>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {currentData.map((item, index) => (
-                      <tr
-                        key={`${item.company_name}-${item.designation}-${index}`}
-                        className={`hover:bg-slate-50 hover:shadow-sm transition-all duration-150 cursor-pointer ${
-                          selectedRowIndex === index ? 'bg-slate-200 border-2 border-slate-300' : ''
-                        }`}
-                        onClick={() => handleRowClick(item, index)}
-                      >
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div
-                            className="text-sm font-semibold text-gray-900 truncate max-w-[180px]"
-                            title={item.company_name}
-                          >
-                            {item.company_name}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          <div
-                            className="truncate max-w-[140px]"
-                            title={item.designation}
-                          >
-                            {item.designation}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          <div
-                            className="truncate max-w-[120px]"
-                            title={item.location}
-                          >
-                            {item.location}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          {item.yoe}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          {formatCurrency(item.min_salary)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          {formatCurrency(item.max_salary)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-600">
-                          {formatCurrency(item.avg_salary)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                          {item.reports}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+          <div
+            className={`transition-all duration-500 ease-in-out flex flex-col ${
+              isSidePanelOpen ? "w-[70%]" : "w-full"
+            }`}
+          >
+            {isLoading ? (
+              <div className="text-center py-16 bg-white dark:bg-white rounded-xl shadow-sm border border-gray-200">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-600 mx-auto"></div>
+                <p className="text-gray-600 text-lg font-semibold mt-4">
+                  Loading salary data...
+                </p>
               </div>
-            </div>
-
-          </>
-        )}
+            ) : currentData.length === 0 ? (
+              <div className="text-center py-16 bg-white dark:bg-white rounded-xl shadow-sm border border-gray-200">
+                <svg
+                  className="mx-auto h-16 w-16 text-neutral-400 dark:text-neutral-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <div className="text-gray-600 text-xl font-semibold mt-6">
+                  No results found
+                </div>
+                <p className="text-neutral-500 dark:text-neutral-500 mt-2">
+                  Try adjusting your filters to see more results
+                </p>
+              </div>
+            ) : (
+              <>
+                {/* Table */}
+                <div className="bg-white dark:bg-white shadow-sm rounded-xl overflow-hidden border border-gray-200 flex-1 flex flex-col">
+                  <div className="overflow-x-auto flex-1 flex flex-col">
+                    <table className="min-w-full divide-y divide-gray-200 table-fixed flex-1">
+                      <thead className="bg-gradient-to-r from-slate-50 to-slate-100 sticky top-0">
+                        <tr>
+                          <th
+                            className="group px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-slate-200 transition-colors select-none w-48"
+                            onClick={() => handleSort("company_name")}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <span className="flex-1">Company</span>
+                              <SortIcon field="company_name" />
+                            </div>
+                          </th>
+                          <th
+                            className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-40"
+                            onClick={() => handleSort("designation")}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <span className="flex-1">Designation</span>
+                              <SortIcon field="designation" />
+                            </div>
+                          </th>
+                          <th
+                            className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
+                            onClick={() => handleSort("location")}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <span className="flex-1">Location</span>
+                              <SortIcon field="location" />
+                            </div>
+                          </th>
+                          <th
+                            className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-20"
+                            onClick={() => handleSort("yoe")}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <span className="flex-1">YOE</span>
+                              <SortIcon field="yoe" />
+                            </div>
+                          </th>
+                          <th
+                            className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
+                            onClick={() => handleSort("avg_salary")}
+                          >
+                            <div className="flex items-center justify-between w-full">
+                              <span className="flex-1">Salary</span>
+                              <SortIcon field="avg_salary" />
+                            </div>
+                          </th>
+                          <th className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider transition-colors select-none w-24">
+                            <div className="flex items-center justify-between w-full">
+                              <span className="flex-1">Reports</span>
+                            </div>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {currentData.map((item, index) => (
+                          <tr
+                            key={`${item.company_name}-${item.designation}-${index}`}
+                            className={`hover:bg-slate-50 hover:shadow-sm transition-all duration-150 cursor-pointer ${
+                              selectedRowIndex === index
+                                ? "bg-slate-200 border-2 border-slate-300"
+                                : ""
+                            }`}
+                            onClick={() => handleRowClick(item, index)}
+                          >
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div
+                                className="text-sm font-semibold text-gray-900 truncate max-w-[180px]"
+                                title={item.company_name}
+                              >
+                                {item.company_name}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                              <div
+                                className="truncate max-w-[140px]"
+                                title={item.designation}
+                              >
+                                {item.designation}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                              <div
+                                className="truncate max-w-[120px]"
+                                title={item.location}
+                              >
+                                {item.location}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                              {item.yoe}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-600">
+                              {formatCurrency(item.avg_salary)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                              {item.upvotes || 0}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Side Panel Section - 40% when open */}
@@ -721,6 +875,7 @@ export default function PayScope() {
               isOpen={isSidePanelOpen}
               onClose={handleCloseSidePanel}
               data={selectedSalaryData}
+              onRefresh={() => setRefreshTrigger((prev) => prev + 1)}
             />
           )}
         </div>
@@ -731,7 +886,10 @@ export default function PayScope() {
             <div className="mt-8 flex items-center justify-between">
               <div className="text-sm text-gray-600">
                 Showing{" "}
-                <span className="font-semibold text-slate-600">{startIndex + 1}</span> to{" "}
+                <span className="font-semibold text-slate-600">
+                  {startIndex + 1}
+                </span>{" "}
+                to{" "}
                 <span className="font-semibold text-slate-600">
                   {Math.min(endIndex, filteredAndSortedData.length)}
                 </span>{" "}
@@ -741,7 +899,7 @@ export default function PayScope() {
                 </span>{" "}
                 results
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <button
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
@@ -752,21 +910,70 @@ export default function PayScope() {
                   Previous
                 </button>
 
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                        page === currentPage
-                          ? "bg-slate-500 text-white shadow-md"
-                          : "text-gray-700 bg-white dark:bg-white border border-gray-300 hover:bg-slate-50 dark:hover:bg-white"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  )
-                )}
+                {(() => {
+                  const pages: (number | string)[] = [];
+                  const maxVisiblePages = 7;
+
+                  if (totalPages <= maxVisiblePages) {
+                    // Show all pages if there are few
+                    for (let i = 1; i <= totalPages; i++) {
+                      pages.push(i);
+                    }
+                  } else {
+                    // Always show first page
+                    pages.push(1);
+
+                    if (currentPage > 3) {
+                      pages.push("...");
+                    }
+
+                    // Show pages around current page
+                    const startPage = Math.max(2, currentPage - 1);
+                    const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+                    for (let i = startPage; i <= endPage; i++) {
+                      if (i !== 1 && i !== totalPages) {
+                        pages.push(i);
+                      }
+                    }
+
+                    if (currentPage < totalPages - 2) {
+                      pages.push("...");
+                    }
+
+                    // Always show last page
+                    if (totalPages > 1) {
+                      pages.push(totalPages);
+                    }
+                  }
+
+                  return pages.map((page, index) => {
+                    if (page === "...") {
+                      return (
+                        <span
+                          key={`ellipsis-${index}`}
+                          className="px-3 py-2 text-sm text-gray-500"
+                        >
+                          ...
+                        </span>
+                      );
+                    }
+
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page as number)}
+                        className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors min-w-[40px] ${
+                          page === currentPage
+                            ? "bg-slate-500 text-white shadow-md"
+                            : "text-gray-700 bg-white dark:bg-white border border-gray-300 hover:bg-slate-50 dark:hover:bg-white"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  });
+                })()}
 
                 <button
                   onClick={() =>
@@ -782,7 +989,6 @@ export default function PayScope() {
           </div>
         )}
       </div>
-
 
       {/* Floating Feedback Button */}
       <button
@@ -906,12 +1112,13 @@ export default function PayScope() {
               }
               className="w-full bg-slate-500 text-white py-3 px-4 rounded-lg hover:bg-slate-600 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-semibold shadow-sm hover:shadow-md"
             >
-              {isSubmittingFeedback ? t("feedback.sending") : t("feedback.submit")}
+              {isSubmittingFeedback
+                ? t("feedback.sending")
+                : t("feedback.submit")}
             </button>
           </div>
         </div>
       )}
-
     </div>
   );
 }

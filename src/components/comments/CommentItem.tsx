@@ -31,11 +31,11 @@ export default function CommentItem({
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showReplies, setShowReplies] = useState(true);
 
-  const isOwner = user?.uid === comment.userId && !comment.isAnonymous;
-  const userVote = user ? comment.votedBy?.[user.uid] || null : null;
+  const isOwner = user?.id === comment.user_id && !comment.is_anonymous;
+  const userVote = user ? comment.voted_by?.[user.id] || null : null;
 
-  const timeAgo = comment.createdAt
-    ? formatDistanceToNow(comment.createdAt.toDate(), { addSuffix: true })
+  const timeAgo = comment.created_at
+    ? formatDistanceToNow(new Date(comment.created_at), { addSuffix: true })
     : "just now";
 
   const handleReply = async (content: string, attachments?: Attachment[]) => {
@@ -49,17 +49,17 @@ export default function CommentItem({
       {/* Comment Header */}
       <div className="flex gap-3 mb-3">
         <img
-          src={comment.userPhotoURL || "/default-avatar.png"}
-          alt={comment.userDisplayName}
+          src={comment.user_photo_url || "/default-avatar.png"}
+          alt={comment.user_display_name}
           className="w-10 h-10 rounded-full border-2 border-slate-200 flex-shrink-0"
         />
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
             <span className="font-medium text-slate-700">
-              {comment.userDisplayName}
+              {comment.user_display_name}
             </span>
-            {comment.isAnonymous && (
+            {comment.is_anonymous && (
               <span className="px-2 py-0.5 bg-slate-100 text-slate-600 text-xs rounded-full">
                 Anonymous
               </span>
@@ -95,13 +95,13 @@ export default function CommentItem({
           <span>Reply</span>
         </button>
 
-        {comment.replyCount > 0 && (
+        {comment.reply_count > 0 && (
           <button
             onClick={() => setShowReplies(!showReplies)}
             className="text-xs text-slate-500 hover:text-slate-700 transition-colors"
           >
-            {showReplies ? "Hide" : "Show"} {comment.replyCount}{" "}
-            {comment.replyCount === 1 ? "reply" : "replies"}
+            {showReplies ? "Hide" : "Show"} {comment.reply_count}{" "}
+            {comment.reply_count === 1 ? "reply" : "replies"}
           </button>
         )}
 

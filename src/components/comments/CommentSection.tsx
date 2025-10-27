@@ -14,13 +14,15 @@ import {
   voteOnReply,
   deleteComment,
   deleteReply,
-} from "@/lib/firebase/comments";
+} from "@/lib/supabase/comments";
+import { voteOnSalary, getUserVote } from "@/lib/supabase/salaryVotes";
 
 interface CommentSectionProps {
   salaryId: string;
   upvoteCount?: number;
   downvoteCount?: number;
   initialCommentCount?: number;
+  onVoteChange?: () => void;
 }
 
 export default function CommentSection({
@@ -28,16 +30,33 @@ export default function CommentSection({
   upvoteCount = 91,
   downvoteCount = 6,
   initialCommentCount = 0,
+  onVoteChange,
 }: CommentSectionProps) {
   const { user } = useAuth();
   const [comments, setComments] = useState<CommentWithReplies[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<SortOption>("best");
   const [commentCount, setCommentCount] = useState(initialCommentCount);
+  const [votes, setVotes] = useState({
+    upvotes: upvoteCount,
+    downvotes: downvoteCount,
+  });
 
-  // Load comments
+  // Update votes when prop changes (from refresh)
+  useEffect(() => {
+    setVotes({
+      upvotes: upvoteCount,
+      downvotes: downvoteCount,
+    });
+  }, [upvoteCount, downvoteCount]);
+  const [userVote, setUserVote] = useState<"up" | "down" | null>(null);
+  const [isVoting, setIsVoting] = useState(false);
+
+  // Load comments and user vote
   useEffect(() => {
     loadComments();
+    loadUserVote();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [salaryId, sortBy]);
 
   const loadComments = async () => {
@@ -53,20 +72,97 @@ export default function CommentSection({
     }
   };
 
+  const loadUserVote = async () => {
+    try {
+      const vote = await getUserVote(salaryId);
+      setUserVote(vote);
+    } catch (error) {
+      console.error("Error loading user vote:", error);
+    }
+  };
+
+  const handleVote = async (voteType: "up" | "down") => {
+    if (!user) {
+      alert("Please log in to vote");
+      return;
+    }
+
+    if (isVoting) return;
+
+    try {
+      setIsVoting(true);
+      console.log("Voting with salaryId:", salaryId, "voteType:", voteType);
+      const result = await voteOnSalary(salaryId, voteType);
+      console.log("Vote result:", result);
+
+      if (result.success) {
+        // Update local vote state
+        if (userVote === voteType) {
+          // Toggling off - already handled by DB trigger, just update userVote
+          setUserVote(null);
+        } else if (userVote) {
+          // Switching vote type - already handled by DB trigger
+          setUserVote(voteType);
+        } else {
+          // New vote - already handled by DB trigger
+          setUserVote(voteType);
+        }
+
+        // Notify parent to refresh data after a delay to let DB trigger complete
+        if (onVoteChange) {
+          setTimeout(() => {
+            onVoteChange();
+          }, 500);
+        }
+      } else {
+        console.error("Vote failed:", result.message);
+        alert(result.message || "Failed to vote");
+      }
+    } catch (error) {
+      console.error("Error voting:", error);
+      alert("An error occurred while voting");
+    } finally {
+      setIsVoting(false);
+    }
+  };
+
   const generateAnonymousName = () => {
-    const adjectives = ["Curious", "Bright", "Clever", "Savvy", "Smart", "Wise", "Bold"];
-    const nouns = ["Analyst", "Engineer", "Developer", "Professional", "Expert", "Specialist"];
+    const adjectives = [
+      "Curious",
+      "Bright",
+      "Clever",
+      "Savvy",
+      "Smart",
+      "Wise",
+      "Bold",
+    ];
+    const nouns = [
+      "Analyst",
+      "Engineer",
+      "Developer",
+      "Professional",
+      "Expert",
+      "Specialist",
+    ];
     const randomAdj = adjectives[Math.floor(Math.random() * adjectives.length)];
     const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
     const randomNum = Math.floor(Math.random() * 1000);
     return `${randomAdj}${randomNoun}${randomNum}`;
   };
 
-  const handleAddComment = async (content: string, attachments?: Attachment[]) => {
+  const handleAddComment = async (
+    content: string,
+    attachments?: Attachment[]
+  ) => {
     try {
-      const userId = user?.uid || null;
-      const displayName = user?.displayName || generateAnonymousName();
-      const photoURL = user?.photoURL || null;
+      const userId = user?.id || null;
+      const displayName =
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        user?.email?.split("@")[0] ||
+        generateAnonymousName();
+      const photoURL =
+        user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null;
 
       await addComment(
         salaryId,
@@ -83,11 +179,20 @@ export default function CommentSection({
     }
   };
 
-  const handleAddReply = async (commentId: string, content: string, attachments?: Attachment[]) => {
+  const handleAddReply = async (
+    commentId: string,
+    content: string,
+    attachments?: Attachment[]
+  ) => {
     try {
-      const userId = user?.uid || null;
-      const displayName = user?.displayName || generateAnonymousName();
-      const photoURL = user?.photoURL || null;
+      const userId = user?.id || null;
+      const displayName =
+        user?.user_metadata?.full_name ||
+        user?.user_metadata?.name ||
+        user?.email?.split("@")[0] ||
+        generateAnonymousName();
+      const photoURL =
+        user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null;
 
       await addReply(
         commentId,
@@ -104,11 +209,14 @@ export default function CommentSection({
     }
   };
 
-  const handleVoteComment = async (commentId: string, voteType: "up" | "down") => {
+  const handleVoteComment = async (
+    commentId: string,
+    voteType: "up" | "down"
+  ) => {
     if (!user) return;
 
     try {
-      await voteOnComment(commentId, user.uid, voteType);
+      await voteOnComment(commentId, user.id, voteType);
       await loadComments();
     } catch (error) {
       console.error("Error voting on comment:", error);
@@ -119,7 +227,7 @@ export default function CommentSection({
     if (!user) return;
 
     try {
-      await voteOnReply(replyId, user.uid, voteType);
+      await voteOnReply(replyId, user.id, voteType);
       await loadComments();
     } catch (error) {
       console.error("Error voting on reply:", error);
@@ -127,7 +235,8 @@ export default function CommentSection({
   };
 
   const handleDeleteComment = async (commentId: string) => {
-    if (!window.confirm("Are you sure you want to delete this comment?")) return;
+    if (!window.confirm("Are you sure you want to delete this comment?"))
+      return;
 
     try {
       await deleteComment(commentId);
@@ -153,8 +262,21 @@ export default function CommentSection({
       {/* Stats Bar */}
       <div className="flex items-center gap-6 mb-4 pb-4 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1 text-slate-600 hover:text-slate-800 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button
+            onClick={() => handleVote("up")}
+            disabled={isVoting || !user}
+            className={`flex items-center gap-1 transition-colors ${
+              userVote === "up"
+                ? "text-green-600 hover:text-green-700"
+                : "text-slate-600 hover:text-slate-800"
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -162,13 +284,26 @@ export default function CommentSection({
                 d="M5 15l7-7 7 7"
               />
             </svg>
-            <span className="text-sm font-medium">{upvoteCount}</span>
+            <span className="text-sm font-medium">{votes.upvotes}</span>
           </button>
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1 text-slate-600 hover:text-slate-800 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button
+            onClick={() => handleVote("down")}
+            disabled={isVoting || !user}
+            className={`flex items-center gap-1 transition-colors ${
+              userVote === "down"
+                ? "text-red-600 hover:text-red-700"
+                : "text-slate-600 hover:text-slate-800"
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -176,13 +311,15 @@ export default function CommentSection({
                 d="M19 9l-7 7-7-7"
               />
             </svg>
-            <span className="text-sm font-medium">{downvoteCount}</span>
+            <span className="text-sm font-medium">{votes.downvotes}</span>
           </button>
         </div>
 
         <div className="flex items-center gap-2">
           <MessageSquare className="w-5 h-5 text-slate-600" />
-          <span className="text-sm font-medium text-slate-600">{commentCount}</span>
+          <span className="text-sm font-medium text-slate-600">
+            {commentCount}
+          </span>
         </div>
 
         <button className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition-colors ml-auto">
@@ -236,7 +373,9 @@ export default function CommentSection({
       ) : comments.length === 0 ? (
         <div className="text-center py-8 bg-slate-50 rounded-lg border border-slate-200">
           <MessageSquare className="w-12 h-12 text-slate-400 mx-auto mb-2" />
-          <p className="text-sm text-slate-600">No comments yet. Be the first to share your thoughts!</p>
+          <p className="text-sm text-slate-600">
+            No comments yet. Be the first to share your thoughts!
+          </p>
         </div>
       ) : (
         <div className="space-y-4">
