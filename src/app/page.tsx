@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { supabase } from "@/lib/supabase/config";
-import { useLanguage } from "@/contexts/LanguageContext";
 import SalaryDetailsPanel from "@/components/SalaryDetailsPanel";
 
 interface SalaryData {
@@ -36,7 +35,6 @@ type SortField = keyof SalaryData;
 type SortDirection = "asc" | "desc";
 
 export default function PayScope() {
-  const { t } = useLanguage();
   const [salaries, setSalaries] = useState<SalaryData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -412,25 +410,24 @@ export default function PayScope() {
 
   // Format currency
   const formatCurrency = (amount: number) => {
-    // Format salary in lakhs for display
     if (amount >= 10000000) {
-      return `₹${(amount / 10000000).toFixed(1)}Cr`;
+      return `Rs ${(amount / 10000000).toFixed(1)}Cr`;
     } else if (amount >= 100000) {
-      return `₹${(amount / 100000).toFixed(1)}L`;
+      return `Rs ${(amount / 100000).toFixed(1)}L`;
     } else if (amount >= 1000) {
-      return `₹${(amount / 1000).toFixed(0)}K`;
+      return `Rs ${(amount / 1000).toFixed(0)}K`;
     }
-    return `₹${amount.toFixed(0)}`;
+    return `Rs ${amount.toFixed(0)}`;
   };
 
-  // Format currency compact (used for filters and ranges)
+  // Format compact for sliders (no currency symbol)
   const formatCurrencyCompact = (amount: number) => {
     if (amount >= 10000000) {
-      return `₹${(amount / 10000000).toFixed(1)}Cr`;
+      return `${(amount / 10000000).toFixed(1)}Cr`;
     } else if (amount >= 100000) {
-      return `₹${(amount / 100000).toFixed(1)}L`;
+      return `${(amount / 100000).toFixed(1)}L`;
     }
-    return `₹${(amount / 1000).toFixed(0)}K`;
+    return `${(amount / 1000).toFixed(0)}K`;
   };
 
   // Sort icon component - consistent icon that doesn't change
@@ -631,41 +628,19 @@ export default function PayScope() {
             </div>
           </div>
 
-          {/* Salary Range Filter */}
+          {/* Total Compensation Range Filter */}
           <div className="mt-4 bg-slate-50 rounded-lg p-4 border border-slate-200">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
-                  <svg
-                    className="w-4 h-4 text-slate-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                    />
-                  </svg>
-                </div>
+              <div className="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
+                <span className="text-slate-700 text-sm font-semibold">Rs</span>
+              </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-900">
-                    Salary Range
-                  </h4>
-                  <p className="text-xs text-gray-600">
-                    Filter by average salary
-                  </p>
+                  <h4 className="text-sm font-semibold text-gray-900">Total Compensation Range</h4>
+                  <p className="text-xs text-gray-600">Filter by total compensation</p>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-lg font-bold text-slate-700">
-                  {formatCurrencyCompact(filters.salaryMin)} -{" "}
-                  {formatCurrencyCompact(filters.salaryMax)}
-                </div>
-                <div className="text-xs text-gray-500">Current range</div>
-              </div>
+              
             </div>
 
             <div className="px-2">
@@ -696,19 +671,7 @@ export default function PayScope() {
             </div>
           </div>
 
-          {/* Results Summary */}
-          <div className="mt-4 flex items-center justify-between">
-            <div className="text-sm text-gray-600 flex items-center">
-              Showing{" "}
-              <span className="font-semibold mx-1 text-slate-600">
-                {filteredAndSortedData.length}
-              </span>{" "}
-              results
-            </div>
-            <div className="text-xs text-gray-500">
-              Last updated: {new Date().toLocaleDateString()}
-            </div>
-          </div>
+          
         </div>
       </div>
 
@@ -1017,7 +980,7 @@ export default function PayScope() {
           <div className="bg-white dark:bg-white rounded-xl shadow-2xl max-w-md w-full p-6 transform transition-all animate-scale-in border border-gray-200">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900">
-                {t("feedback.title")}
+                Share Your Feedback
               </h2>
               <button
                 onClick={() => setIsFeedbackOpen(false)}
@@ -1042,7 +1005,7 @@ export default function PayScope() {
             {/* Rating */}
             <div className="mb-6">
               <label className="block text-sm font-semibold text-gray-700 mb-3">
-                {t("feedback.rating")}
+                Rate your experience
               </label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -1078,12 +1041,12 @@ export default function PayScope() {
             {/* Feedback Message */}
             <div className="mb-6">
               <label className="block text-sm font-semibold text-gray-700 mb-3">
-                {t("feedback.message")}
+                Your feedback
               </label>
               <textarea
                 value={feedbackMessage}
                 onChange={(e) => setFeedbackMessage(e.target.value)}
-                placeholder={t("feedback.placeholder")}
+                placeholder="Tell us what you think..."
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-gray-900 placeholder-gray-500 bg-white dark:bg-white transition-colors"
               />
@@ -1112,9 +1075,7 @@ export default function PayScope() {
               }
               className="w-full bg-slate-500 text-white py-3 px-4 rounded-lg hover:bg-slate-600 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors font-semibold shadow-sm hover:shadow-md"
             >
-              {isSubmittingFeedback
-                ? t("feedback.sending")
-                : t("feedback.submit")}
+              {isSubmittingFeedback ? "Sending..." : "Submit Feedback"}
             </button>
           </div>
         </div>
@@ -1122,3 +1083,4 @@ export default function PayScope() {
     </div>
   );
 }
+

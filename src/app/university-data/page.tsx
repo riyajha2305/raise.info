@@ -428,12 +428,7 @@ export default function UniversityDataPage() {
   );
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
+    return new Intl.NumberFormat("en-IN").format(amount);
   };
 
   const getEmploymentTypeColor = (type: string) => {
@@ -482,10 +477,10 @@ export default function UniversityDataPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-5xl font-bold text-slate-700 mb-4">
-              Which College Gets You Paid More?
+              Universities That Pay Best
             </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Compare salaries by university. IIT vs NIT vs BITS - see who pays what.
+              Compare total compensation by university.
             </p>
           </div>
         </div>
@@ -645,22 +640,15 @@ export default function UniversityDataPage() {
           <div className="mt-4 bg-slate-50 rounded-lg p-4 border border-slate-200">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
-                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                  </svg>
-                </div>
+              <div className="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
+                <span className="text-slate-700 text-sm font-semibold">Rs</span>
+              </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-900">Salary Range</h4>
-                  <p className="text-xs text-gray-600">Filter by annual salary</p>
+                  <h4 className="text-sm font-semibold text-gray-900">Total Compensation Range</h4>
+                  <p className="text-xs text-gray-600">Filter by annual total compensation</p>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-lg font-bold text-slate-700">
-                  {formatCurrency(filters.salaryMin)} - {formatCurrency(filters.salaryMax)}
-                </div>
-                <div className="text-xs text-gray-500">Current range</div>
-              </div>
+            
             </div>
 
             <div className="px-2">
@@ -684,19 +672,7 @@ export default function UniversityDataPage() {
             </div>
           </div>
 
-          {/* Results Summary */}
-          <div className="mt-4 flex items-center justify-between">
-            <div className="text-sm text-gray-600 flex items-center">
-              Showing{" "}
-              <span className="font-semibold mx-1 text-slate-600">
-                {filteredAndSortedData.length}
-              </span>{" "}
-              results
-            </div>
-            <div className="text-xs text-gray-500">
-              Last updated: {new Date().toLocaleDateString()}
-            </div>
-          </div>
+          
         </div>
       </div>
 
@@ -778,29 +754,11 @@ export default function UniversityDataPage() {
                           </div>
                         </th>
                         <th
-                          className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                          onClick={() => handleSort("salary_min")}
-                        >
-                          <div className="flex items-center justify-between w-full">
-                            <span className="flex-1">Min Salary</span>
-                            <SortIcon field="salary_min" />
-                          </div>
-                        </th>
-                        <th
-                          className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
-                          onClick={() => handleSort("salary_max")}
-                        >
-                          <div className="flex items-center justify-between w-full">
-                            <span className="flex-1">Max Salary</span>
-                            <SortIcon field="salary_max" />
-                          </div>
-                        </th>
-                        <th
-                          className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
+                          className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-40"
                           onClick={() => handleSort("salary_avg")}
                         >
                           <div className="flex items-center justify-between w-full">
-                            <span className="flex-1">Avg Salary</span>
+                            <span className="flex-1">Total Compensation</span>
                             <SortIcon field="salary_avg" />
                           </div>
                         </th>
@@ -847,16 +805,6 @@ export default function UniversityDataPage() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-700">
                               {item.location}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-700">
-                              {formatCurrency(item.salary_min)}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-700">
-                              {formatCurrency(item.salary_max)}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">

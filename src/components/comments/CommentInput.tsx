@@ -31,6 +31,7 @@ export default function CommentInput({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const MAX_CHARS = 100;
 
   const handleFileUpload = async (file: File, type: "file" | "image") => {
     if (!user) return;
@@ -113,7 +114,7 @@ export default function CommentInput({
 
       <textarea
         value={content}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={(e) => setContent(e.target.value.slice(0, MAX_CHARS))}
         placeholder={placeholder}
         autoFocus={autoFocus}
         disabled={isSubmitting || isUploading}
@@ -124,6 +125,7 @@ export default function CommentInput({
             handleSubmit();
           }
         }}
+        maxLength={MAX_CHARS}
       />
 
       {/* Upload Progress */}
@@ -184,7 +186,7 @@ export default function CommentInput({
         </div>
       )}
 
-      <div className="flex items-center justify-between px-4 py-3 bg-slate-50 rounded-b-lg border-t border-slate-200">
+      <div className="flex items-center justify-between px-4 py-2 bg-slate-50 rounded-b-lg border-t border-slate-200">
         <div className="flex items-center gap-2">
           <button
             onClick={() => handleUploadClick("file")}
@@ -218,7 +220,10 @@ export default function CommentInput({
             <AtSign className="w-4 h-4" />
           </button>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-slate-500">
+            {content.length}/{MAX_CHARS}
+          </span>
           {onCancel && (
             <button
               onClick={onCancel}

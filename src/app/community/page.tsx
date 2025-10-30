@@ -84,9 +84,7 @@ export default function CommunityPage() {
                   className="w-full h-full object-contain"
                 />
               </div>
-              <h1 className="text-4xl font-bold text-slate-700">
-                Join Our Community
-              </h1>
+              <h1 className="text-4xl font-bold text-slate-700">Find Your People</h1>
             </div>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Connect with professionals, share salary insights, and get career advice from our vibrant community across multiple platforms.

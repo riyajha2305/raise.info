@@ -60,12 +60,10 @@ export default function AuthPage() {
                   className="w-full h-full object-contain"
                 />
               </div>
-              <h1 className="text-4xl font-bold text-slate-700">
-                Sign In / Sign Up
-              </h1>
+              <h1 className="text-4xl font-bold text-slate-700">Join Salaris</h1>
             </div>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Sign in to access your personalized dashboard and save your favorite salary insights
+              Access your dashboard and save favorite insights
             </p>
           </div>
         </div>

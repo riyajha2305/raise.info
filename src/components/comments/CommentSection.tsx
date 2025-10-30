@@ -6,15 +6,7 @@ import CommentInput from "./CommentInput";
 import CommentItem from "./CommentItem";
 import { CommentWithReplies, SortOption, Attachment } from "@/types/comments";
 import { useAuth } from "@/contexts/AuthContext";
-import {
-  getComments,
-  addComment,
-  addReply,
-  voteOnComment,
-  voteOnReply,
-  deleteComment,
-  deleteReply,
-} from "@/lib/supabase/comments";
+import { getComments, addComment, voteOnComment, deleteComment } from "@/lib/supabase/comments";
 import { voteOnSalary, getUserVote } from "@/lib/supabase/salaryVotes";
 
 interface CommentSectionProps {
@@ -36,11 +28,15 @@ export default function CommentSection({
   const [comments, setComments] = useState<CommentWithReplies[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<SortOption>("best");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(3);
   const [commentCount, setCommentCount] = useState(initialCommentCount);
   const [votes, setVotes] = useState({
     upvotes: upvoteCount,
     downvotes: downvoteCount,
   });
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Update votes when prop changes (from refresh)
   useEffect(() => {
@@ -65,6 +61,7 @@ export default function CommentSection({
       const fetchedComments = await getComments(salaryId, sortBy);
       setComments(fetchedComments);
       setCommentCount(fetchedComments.length);
+      setCurrentPage(1);
     } catch (error) {
       console.error("Error loading comments:", error);
     } finally {
@@ -179,35 +176,7 @@ export default function CommentSection({
     }
   };
 
-  const handleAddReply = async (
-    commentId: string,
-    content: string,
-    attachments?: Attachment[]
-  ) => {
-    try {
-      const userId = user?.id || null;
-      const displayName =
-        user?.user_metadata?.full_name ||
-        user?.user_metadata?.name ||
-        user?.email?.split("@")[0] ||
-        generateAnonymousName();
-      const photoURL =
-        user?.user_metadata?.avatar_url || user?.user_metadata?.picture || null;
-
-      await addReply(
-        commentId,
-        userId,
-        displayName,
-        photoURL,
-        content,
-        attachments
-      );
-      await loadComments();
-    } catch (error) {
-      console.error("Error adding reply:", error);
-      throw error;
-    }
-  };
+  // Reply feature removed
 
   const handleVoteComment = async (
     commentId: string,
@@ -223,39 +192,27 @@ export default function CommentSection({
     }
   };
 
-  const handleVoteReply = async (replyId: string, voteType: "up" | "down") => {
-    if (!user) return;
+  // Reply feature removed
 
-    try {
-      await voteOnReply(replyId, user.id, voteType);
-      await loadComments();
-    } catch (error) {
-      console.error("Error voting on reply:", error);
-    }
+  const handleDeleteComment = (commentId: string) => {
+    setPendingDeleteId(commentId);
   };
 
-  const handleDeleteComment = async (commentId: string) => {
-    if (!window.confirm("Are you sure you want to delete this comment?"))
-      return;
-
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return;
     try {
-      await deleteComment(commentId);
+      setIsDeleting(true);
+      await deleteComment(pendingDeleteId);
+      setPendingDeleteId(null);
       await loadComments();
     } catch (error) {
       console.error("Error deleting comment:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
-  const handleDeleteReply = async (replyId: string, commentId: string) => {
-    if (!window.confirm("Are you sure you want to delete this reply?")) return;
-
-    try {
-      await deleteReply(replyId, commentId);
-      await loadComments();
-    } catch (error) {
-      console.error("Error deleting reply:", error);
-    }
-  };
+  // Reply feature removed
 
   return (
     <div className="mt-6">
@@ -371,25 +328,94 @@ export default function CommentSection({
           <p className="mt-2 text-sm text-slate-600">Loading comments...</p>
         </div>
       ) : comments.length === 0 ? (
-        <div className="text-center py-8 bg-slate-50 rounded-lg border border-slate-200">
+        <div className="text-center py-6 bg-slate-50 rounded-lg border border-slate-200">
           <MessageSquare className="w-12 h-12 text-slate-400 mx-auto mb-2" />
           <p className="text-sm text-slate-600">
             No comments yet. Be the first to share your thoughts!
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {comments.map((comment) => (
-            <CommentItem
-              key={comment.id}
-              comment={comment}
-              onVote={handleVoteComment}
-              onReply={handleAddReply}
-              onVoteReply={handleVoteReply}
-              onDelete={handleDeleteComment}
-              onDeleteReply={handleDeleteReply}
-            />
-          ))}
+        <>
+          <div className="space-y-4">
+            {comments
+              .slice((currentPage - 1) * itemsPerPage, (currentPage - 1) * itemsPerPage + itemsPerPage)
+              .map((comment) => (
+                <CommentItem
+                  key={comment.id}
+                  comment={comment}
+                  onVote={handleVoteComment}
+                  onDelete={handleDeleteComment}
+                />
+              ))}
+          </div>
+
+          {Math.ceil(comments.length / itemsPerPage) > 1 && (
+            <div className="mt-6 flex items-center justify-between">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-2 text-sm font-medium rounded-lg transition-colors text-gray-700 bg-white border border-gray-300 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Prev
+              </button>
+
+              <div className="flex gap-2">
+                {Array.from(
+                  { length: Math.ceil(comments.length / itemsPerPage) },
+                  (_, i) => i + 1
+                ).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                      page === currentPage
+                        ? "bg-slate-500 text-white shadow-md"
+                        : "text-gray-700 bg-white border border-gray-300 hover:bg-slate-50"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(p + 1, Math.ceil(comments.length / itemsPerPage)))
+                }
+                disabled={currentPage === Math.ceil(comments.length / itemsPerPage)}
+                className="px-3 py-2 text-sm font-medium rounded-lg transition-colors text-gray-700 bg-white border border-gray-300 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {pendingDeleteId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setPendingDeleteId(null)} />
+          <div className="relative bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-sm mx-4 p-5">
+            <h4 className="text-base font-semibold text-slate-900 mb-2">Delete comment?</h4>
+            <p className="text-sm text-slate-600 mb-4">This action cannot be undone.</p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setPendingDeleteId(null)}
+                disabled={isDeleting}
+                className="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={isDeleting}
+                className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50"
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
