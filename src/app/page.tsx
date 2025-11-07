@@ -5,6 +5,7 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { supabase } from "@/lib/supabase/config";
 import SalaryDetailsPanel from "@/components/SalaryDetailsPanel";
+import AddSalaryModal from "@/components/AddSalaryModal";
 
 interface SalaryData {
   id?: string;
@@ -142,6 +143,7 @@ export default function PayScope() {
     useState<SalaryData | null>(null);
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(0); // Track selected row index
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [isAddSalaryModalOpen, setIsAddSalaryModalOpen] = useState(false);
 
   // Handle row click to open side panel
   const handleRowClick = (item: SalaryData, index: number) => {
@@ -468,29 +470,46 @@ export default function PayScope() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-slate-200 to-slate-300 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="bg-gradient-to-r from-slate-200 to-slate-300 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
-            <h1 className="text-5xl font-bold text-slate-700 mb-4">
+            <h1 className="text-3xl font-bold text-slate-700 mb-2">
               Are You Getting Paid What You Deserve?
             </h1>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Real salary data from 1000+ companies. Stop guessing, start
-              negotiating.
+            <p className="text-sm text-slate-600 max-w-3xl mx-auto mb-4">
+              Real salary data from 1000+ companies. Stop guessing, start negotiating.
             </p>
+            <div className="flex justify-center">
+              <button
+                onClick={() => setIsAddSalaryModalOpen(true)}
+                className="group relative bg-white border border-slate-300 rounded-lg px-5 py-2.5 hover:border-slate-500 hover:shadow-md transition-all duration-200"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center group-hover:bg-slate-600 transition-colors">
+                    <svg className="w-4 h-4 text-slate-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-semibold text-slate-800">Share Your Salary</span>
+                  <svg className="w-4 h-4 text-slate-400 group-hover:text-slate-600 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Filters Section */}
       <div className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
           {/* Filter Header */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-slate-100 rounded flex items-center justify-center">
                 <svg
-                  className="w-4 h-4 text-slate-600"
+                  className="w-3.5 h-3.5 text-slate-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -503,16 +522,16 @@ export default function PayScope() {
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-sm font-semibold text-gray-900">
                 Filter Results
               </h3>
             </div>
             <button
               onClick={resetFilters}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors font-medium shadow-sm hover:shadow-md"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-slate-700 text-white rounded hover:bg-slate-800 transition-colors font-medium"
             >
               <svg
-                className="w-4 h-4"
+                className="w-3.5 h-3.5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -529,10 +548,10 @@ export default function PayScope() {
           </div>
 
           {/* Filter Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
             {/* Company Name with Autocomplete */}
             <div className="relative" ref={autocompleteRef}>
-              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-0.5 uppercase tracking-wide">
                 Company
               </label>
               <input
@@ -546,7 +565,7 @@ export default function PayScope() {
                   filters.companyName &&
                   setShowAutocomplete(filteredCompanies.length > 0)
                 }
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white transition-colors"
+                className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500 bg-white transition-colors"
               />
               {showAutocomplete && filteredCompanies.length > 0 && (
                 <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto">
@@ -565,7 +584,7 @@ export default function PayScope() {
 
             {/* Location */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-0.5 uppercase tracking-wide">
                 Location
               </label>
               <select
@@ -584,7 +603,7 @@ export default function PayScope() {
 
             {/* Designation */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-0.5 uppercase tracking-wide">
                 Designation
               </label>
               <select
@@ -605,7 +624,7 @@ export default function PayScope() {
 
             {/* Years of Experience */}
             <div>
-              <label className="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+              <label className="block text-xs font-semibold text-gray-600 mb-0.5 uppercase tracking-wide">
                 Years of Exp
               </label>
               <select
@@ -629,21 +648,21 @@ export default function PayScope() {
           </div>
 
           {/* Total Compensation Range Filter */}
-          <div className="mt-4 bg-slate-50 rounded-lg p-4 border border-slate-200">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-slate-200 rounded-lg flex items-center justify-center">
-                <span className="text-slate-700 text-sm font-semibold">Rs</span>
+          <div className="mt-3 bg-slate-50 rounded-lg p-3 border border-slate-200">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-slate-200 rounded flex items-center justify-center">
+                <span className="text-slate-700 text-xs font-semibold">Rs</span>
               </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-900">Total Compensation Range</h4>
-                  <p className="text-xs text-gray-600">Filter by total compensation</p>
+                  <h4 className="text-xs font-semibold text-gray-900">Total Compensation Range</h4>
+                  <p className="text-xs text-gray-500">Filter by total compensation</p>
                 </div>
               </div>
               
             </div>
 
-            <div className="px-2">
+            <div className="px-1">
               <Slider
                 range
                 min={salaryRange.min}
@@ -651,20 +670,20 @@ export default function PayScope() {
                 value={[filters.salaryMin, filters.salaryMax]}
                 onChange={(value) => handleSalaryRangeChange(value as number[])}
                 styles={{
-                  track: { backgroundColor: "#64748b", height: 6 },
-                  rail: { backgroundColor: "#e2e8f0", height: 6 },
+                  track: { backgroundColor: "#64748b", height: 4 },
+                  rail: { backgroundColor: "#e2e8f0", height: 4 },
                   handle: {
                     backgroundColor: "#64748b",
                     borderColor: "#64748b",
-                    width: 20,
-                    height: 20,
-                    marginTop: -7,
+                    width: 16,
+                    height: 16,
+                    marginTop: -6,
                     opacity: 1,
-                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
                   },
                 }}
               />
-              <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
+              <div className="flex justify-between items-center mt-1.5 text-xs text-gray-500">
                 <span>Min: {formatCurrencyCompact(salaryRange.min)}</span>
                 <span>Max: {formatCurrencyCompact(salaryRange.max)}</span>
               </div>
@@ -676,7 +695,7 @@ export default function PayScope() {
       </div>
 
       {/* Results Table */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         {/* Table and Side Panel Container */}
         <div
           className={`flex gap-4 transition-all duration-500 ease-in-out min-h-[600px] ${
@@ -736,7 +755,7 @@ export default function PayScope() {
                             </div>
                           </th>
                           <th
-                            className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-40"
+                            className="group px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-40"
                             onClick={() => handleSort("designation")}
                           >
                             <div className="flex items-center justify-between w-full">
@@ -745,7 +764,7 @@ export default function PayScope() {
                             </div>
                           </th>
                           <th
-                            className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
+                            className="group px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
                             onClick={() => handleSort("location")}
                           >
                             <div className="flex items-center justify-between w-full">
@@ -754,7 +773,7 @@ export default function PayScope() {
                             </div>
                           </th>
                           <th
-                            className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-20"
+                            className="group px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-20"
                             onClick={() => handleSort("yoe")}
                           >
                             <div className="flex items-center justify-between w-full">
@@ -763,7 +782,7 @@ export default function PayScope() {
                             </div>
                           </th>
                           <th
-                            className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
+                            className="group px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider cursor-pointer hover:bg-gray-200 transition-colors select-none w-32"
                             onClick={() => handleSort("avg_salary")}
                           >
                             <div className="flex items-center justify-between w-full">
@@ -771,7 +790,7 @@ export default function PayScope() {
                               <SortIcon field="avg_salary" />
                             </div>
                           </th>
-                          <th className="group px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider transition-colors select-none w-24">
+                          <th className="group px-3 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider transition-colors select-none w-24">
                             <div className="flex items-center justify-between w-full">
                               <span className="flex-1">Reports</span>
                             </div>
@@ -789,7 +808,7 @@ export default function PayScope() {
                             }`}
                             onClick={() => handleRowClick(item, index)}
                           >
-                            <td className="px-6 py-4 whitespace-nowrap">
+                            <td className="px-3 py-2 whitespace-nowrap">
                               <div
                                 className="text-sm font-semibold text-gray-900 truncate max-w-[180px]"
                                 title={item.company_name}
@@ -1080,6 +1099,13 @@ export default function PayScope() {
           </div>
         </div>
       )}
+
+      {/* Add Salary Modal */}
+      <AddSalaryModal
+        isOpen={isAddSalaryModalOpen}
+        onClose={() => setIsAddSalaryModalOpen(false)}
+        type="fulltime"
+      />
     </div>
   );
 }

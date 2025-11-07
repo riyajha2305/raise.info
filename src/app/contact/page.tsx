@@ -78,30 +78,28 @@ export default function ContactUs() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-slate-200 to-slate-300 shadow-lg">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"></div>
+      <header className="bg-gradient-to-r from-slate-200 to-slate-300 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-slate-700">Let's Talk</h1>
+          </div>
+        </div>
       </header>
 
       {/* Main Content */}
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-white shadow-sm rounded-lg p-8">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-600 to-slate-700 bg-clip-text text-transparent mb-2 text-center">
-            Let's Talk
-          </h2>
-
-          
-
-          <p className="text-gray-700 mb-8 leading-relaxed text-center">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="bg-white shadow-sm rounded-lg p-6">
+          <p className="text-sm text-gray-700 mb-6 leading-relaxed text-center">
             Have questions, suggestions, or feedback? We'd love to hear from
             you.
           </p>
 
           {/* Contact Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-xs font-medium text-gray-700 mb-0.5"
               >
                 Name
               </label>
@@ -112,7 +110,7 @@ export default function ContactUs() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500"
+                className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500"
                 placeholder="Your name"
               />
             </div>
@@ -120,7 +118,7 @@ export default function ContactUs() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-xs font-medium text-gray-700 mb-0.5"
               >
                 Email
               </label>
@@ -131,7 +129,7 @@ export default function ContactUs() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500"
+                className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-transparent text-gray-900 placeholder-gray-500"
                 placeholder="your.email@example.com"
               />
             </div>
@@ -139,7 +137,7 @@ export default function ContactUs() {
             <div>
               <label
                 htmlFor="message"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-xs font-medium text-gray-700 mb-0.5"
               >
                 Message
               </label>
@@ -149,21 +147,21 @@ export default function ContactUs() {
                 value={formData.message}
                 onChange={handleChange}
                 required
-                rows={6}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#80A1BA] focus:border-transparent resize-none text-gray-900 placeholder-gray-500"
+                rows={5}
+                className="w-full px-2.5 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-transparent resize-none text-gray-900 placeholder-gray-500"
                 placeholder="Tell us more..."
               />
             </div>
 
             {/* Status Messages */}
             {submitStatus === "success" && (
-              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">
+              <div className="bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded text-sm">
                 Thank you! Your message has been sent successfully.
               </div>
             )}
 
             {submitStatus === "error" && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded text-sm">
                 Oops! Something went wrong. Please try again.
               </div>
             )}
@@ -171,7 +169,7 @@ export default function ContactUs() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-slate-500 text-white py-3 px-6 rounded-lg hover:bg-slate-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-slate-500 text-white py-2.5 px-5 rounded-lg hover:bg-slate-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed text-sm"
             >
               {isSubmitting ? "Sending..." : "Send Message"}
             </button>
